@@ -8,8 +8,6 @@ public class GameController : MonoBehaviour {
 
 	private PlayerMovement playerMovement;
 
-	private EnemyMonster enemyMonster;
-
 	public float distanceTilSpawnThreshold;
 	private float probabilityOfMonsterAttackPerFrame = 0.01f;
 
@@ -18,7 +16,6 @@ public class GameController : MonoBehaviour {
 		overworld = GameObject.Find("Overworld");
 		battle = GameObject.Find("Battle");
 		playerMovement = GameObject.FindObjectOfType<PlayerMovement>();
-		enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
 		battle.SetActive(false);
 	}
 	

@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButton(0) && !eventSystem.IsPointerOverGameObject()) {
+		if (Input.GetMouseButton(0) && eventSystem.currentSelectedGameObject == null) {
 			MoveWithFinger();
 			CalculateDistanceTraveled();
 		}

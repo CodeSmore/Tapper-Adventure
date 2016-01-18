@@ -17,7 +17,7 @@ public class PlayerCombatController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButtonDown(0) && !eventSystem.IsPointerOverGameObject()) {
+		if (Input.GetMouseButtonDown(0) && eventSystem.currentSelectedGameObject == null && !eventSystem.IsPointerOverGameObject()) {
 			playerClass.ChargeEnergy();
 		}
 	}
