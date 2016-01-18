@@ -6,6 +6,8 @@ public class PlayerMovement : MonoBehaviour {
 
 	public float movementSpeed, padding;
 	private float xMin, xMax, yMin, yMax;
+	private float distanceTraveled;
+	private Vector3 lastKnownPosition;
 
 	private Camera overworldCamera;
 	private EventSystem eventSystem;
@@ -21,13 +23,15 @@ public class PlayerMovement : MonoBehaviour {
 		xMax = 18 - padding;
 		yMin = 0 + padding;
 		yMax = 8 - padding;
+
+		lastKnownPosition = transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetMouseButton(0) && !eventSystem.IsPointerOverGameObject()) {
 			MoveWithFinger();
-
+			CalculateDistanceTraveled();
 		}
 	}
 
@@ -53,6 +57,23 @@ public class PlayerMovement : MonoBehaviour {
 
 		
 		transform.position = playerPos;
+	}
+
+	private void CalculateDistanceTraveled () {
+		// distance = || origPos - newPos || / Mathf.Sqrt Pow((orig.x - new.x), 2) +
+		Vector3 currentPosition = transform.position;
+		if (lastKnownPosition != transform.position) {
+			distanceTraveled += Mathf.Sqrt(Mathf.Pow((lastKnownPosition.x - currentPosition.x), 2) + Mathf.Pow((lastKnownPosition.y - currentPosition.y), 2));
+		}
+		lastKnownPosition = transform.position;
+	}
+
+	public void ResetDistanceTraveled () {
+		distanceTraveled = 0;
+	}
+
+	public float GetDistanceTraveled () {
+		return distanceTraveled;
 	}
 
 	public static void ToggleOverworldMode () {

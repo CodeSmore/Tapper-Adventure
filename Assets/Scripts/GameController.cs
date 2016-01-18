@@ -5,17 +5,29 @@ public class GameController : MonoBehaviour {
 
 	private GameObject overworld;
 	private GameObject battle;
+
+	private PlayerMovement playerMovement;
+
+	private EnemyMonster enemyMonster;
+
+	public float distanceTilSpawnThreshold;
+	private float probabilityOfMonsterAttackPerFrame = 0.01f;
+
 	// Use this for initialization
 	void Start () {
 		overworld = GameObject.Find("Overworld");
 		battle = GameObject.Find("Battle");
-
+		playerMovement = GameObject.FindObjectOfType<PlayerMovement>();
+		enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
 		battle.SetActive(false);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (playerMovement.GetDistanceTraveled() >= distanceTilSpawnThreshold && Random.value < probabilityOfMonsterAttackPerFrame) {
+			playerMovement.ResetDistanceTraveled();
+			TransitionToBattle();
+		}
 	}
 
 	public void TransitionToOverworld () {
@@ -25,8 +37,13 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void TransitionToBattle () {
+		// TODO spawn enemy
+
 		// disable overworld, enable battle
 		overworld.SetActive(false);
 		battle.SetActive(true);
 	}
+
+		
+	
 }
