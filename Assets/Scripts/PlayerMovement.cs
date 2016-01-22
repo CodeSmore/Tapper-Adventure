@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour {
 	private float xMin, xMax, yMin, yMax;
 	private float distanceTraveled;
 	private Vector3 lastKnownPosition;
+	private bool playerIsMoving;
 
 	private Camera overworldCamera;
 	private EventSystem eventSystem;
@@ -64,6 +65,9 @@ public class PlayerMovement : MonoBehaviour {
 		Vector3 currentPosition = transform.position;
 		if (lastKnownPosition != transform.position) {
 			distanceTraveled += Mathf.Sqrt(Mathf.Pow((lastKnownPosition.x - currentPosition.x), 2) + Mathf.Pow((lastKnownPosition.y - currentPosition.y), 2));
+			playerIsMoving = true;
+		} else {
+			playerIsMoving = false;
 		}
 		lastKnownPosition = transform.position;
 	}
@@ -78,5 +82,17 @@ public class PlayerMovement : MonoBehaviour {
 
 	public static void ToggleOverworldMode () {
 		overworldMode = !overworldMode;
+	}
+
+	public bool PlayerIsMoving () {
+		return playerIsMoving;
+	}
+
+	public Vector3 GetLastKnowPosition () {
+		return lastKnownPosition;
+	}
+
+	public void SetPlayerPosition (Vector3 pos) {
+		transform.position = pos;
 	}
 }

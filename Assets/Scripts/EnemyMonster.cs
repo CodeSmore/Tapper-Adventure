@@ -11,6 +11,11 @@ public class EnemyMonster : MonoBehaviour {
 	public float actionDamage;
 	public StatusEffect actionStatusEffect;
 	public float statusEffectChance;
+	public float experienceReward;
+
+	public float HealthBarYPos;
+	public float ActionBarYPos;
+
 
 	// Use this for initialization
 	void Start () {
@@ -58,11 +63,27 @@ public class EnemyMonster : MonoBehaviour {
 		currentHealth = maxHealth;
 	}
 
+	public void KillMonster () {
+		currentHealth = 0;
+	}
+
 	public void ResetActionTimer () {
 		actionTimer = 0;
 	}
 
 	public void IncrementActionTimer (float amount) {
 		actionTimer += amount;
+	}
+
+	public float GetExperienceReward () {
+		return experienceReward;
+	}
+
+	public float GetHealthBarYPos () {
+		return HealthBarYPos;
+	}
+
+	public float GetActionBarYPos () {
+		return ActionBarYPos;
 	}
 }

@@ -13,7 +13,15 @@ public class PlayerClass : MonoBehaviour {
 	public float maxEnergy;
 	public float energyRecoveryRate;
 	public int playerLevel;
-	public float experiencePoints;
+	public float currentExperiencePoints;
+	public float attackStat;
+
+	// basis of each stat level-up
+	public float baseHealth;
+	public float baseEnergy;
+	public float baseAttackStat;
+
+
 	[Header("=======", order = 0)]
 	[Header("", order = 1)]
 	[Header("Skills", order = 1)]
@@ -81,6 +89,7 @@ public class PlayerClass : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+// TODO instantiate all stats based on level-up formula
 		skill1 = new Skill (skillName1, levelOfSkill1, baseDamage1, energyCost1, coolDownTime1, statusEffectOfSkill1, chanceOfStatusEffect1, statusEffectDurationInSeconds1);
 		currentHealth = maxHealth;
 		currentStatus = StatusEffect.None;
@@ -95,13 +104,56 @@ public class PlayerClass : MonoBehaviour {
 		return skill1;
 	}
 
+	public int GetPlayerLevel () {
+		return playerLevel;
+	}
+
+	public void LevelUp () {
+		playerLevel++;
+		ResetCurrentExperiencePoints();
+
+		// increase stats
+		attackStat = baseAttackStat + playerLevel - 1;
+		maxHealth = baseHealth * playerLevel;
+		maxEnergy = baseEnergy * playerLevel;
+
+		// add addition HP and EP
+		Heal (maxHealth);
+	}
+
+	public void SetPlayerLevel (int level) {
+		playerLevel = level;
+	}
+
+	public float GetCurrentExperiencePoints () {
+		return currentExperiencePoints;
+	}
+
+	public void ResetCurrentExperiencePoints () {
+		currentExperiencePoints = 0;
+	}
+
+	public float GetExperiencePointsForNextLevel () {
+		float expForNextLevel = 20 + 20 * (playerLevel - 1);
+
+		return expForNextLevel;
+	}
+
+	public void SetCurrentExperiencePoints (float points) {
+		currentExperiencePoints = points;	
+	}
+
+	public void GainExperience (float points) {
+		currentExperiencePoints += points;
+	}
+
 	public void ChargeEnergy () {
 		currentEnergy = Mathf.Clamp (currentEnergy + energyRecoveryRate, 0, maxEnergy);
 	}
 
 	public void UseEnergy (float amountUsed) {
 		if (currentEnergy >= amountUsed)
-			currentEnergy -= amountUsed;
+			currentEnergy = Mathf.Clamp (currentEnergy - amountUsed, 0, maxEnergy);
 	}
 
 	public void Heal (float healAmount) {
@@ -122,12 +174,20 @@ public class PlayerClass : MonoBehaviour {
 		return currentHealth;
 	}
 
+	public void SetCurrentHealth (float health) {
+		currentHealth = health;
+	}
+
 	public float GetMaxEnergy () {
 		return maxEnergy;
 	}
 
 	public float GetCurrentEnergy () {
 		return currentEnergy;
+	}
+
+	public float GetAttackStat () {
+		return attackStat;
 	}
 }
 

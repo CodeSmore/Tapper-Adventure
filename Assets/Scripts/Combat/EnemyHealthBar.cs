@@ -2,40 +2,44 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class PlayerHealthBar : MonoBehaviour {
-	
+public class EnemyHealthBar : MonoBehaviour {
+
 	private float currentHealth;
 	private float maxHealth;
 	private float healthRatio;
 	
 	private Image healthBarImage;
-	private Text playerHealthText;
 	
-	private PlayerClass playerClass;
+	private EnemyMonster enemyMonster;
 
 	// Use this for initialization
 	void Start () {
-		playerClass = GameObject.FindObjectOfType<PlayerClass>();
-		maxHealth = playerClass.GetMaxHealth();
+		enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
+
 
 		healthBarImage = GetComponent<Image>();
-		playerHealthText = GetComponentInChildren<Text>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		currentHealth = playerClass.GetCurrentHealth();
-		
-		HandleHealthBar ();
+		if (!enemyMonster) {
+			enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
+		} else {
+			maxHealth = enemyMonster.GetMaxHealth();
+			currentHealth = enemyMonster.GetCurrentHealth();
+
+			GetComponent<RectTransform>().anchoredPosition = new Vector2 (transform.position.x , enemyMonster.GetHealthBarYPos());
+
+			HandleHealthBar ();
+		}
 	}
 	
 	void HandleHealthBar () {
 		healthRatio = currentHealth / maxHealth;
-		playerHealthText.text = currentHealth + " / " + maxHealth;
 
 		healthBarImage.fillAmount = healthRatio;
 
-		// Adjust color of healthbar
+		// adjust color of healthbar
 		if (healthRatio > 0.50f) {
 			// green
 			healthBarImage.color = Color.green;

@@ -1,15 +1,20 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerCombatController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameController.cs">
     <Files>
-      <File FileName="Assets\Scripts\PlayerMovement.cs" Line="32" Column="79" />
-      <File FileName="Assets\Scripts\PlayerEnergyBar.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PlayerHealthBar.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PlayerCombatController.cs" Line="20" Column="53" />
-      <File FileName="Assets\Scripts\PlayerClass.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\GameController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\EnemyActionBar.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Combat\BattleResultsController.cs" Line="44" Column="63" />
       <File FileName="Assets\Scripts\PauseMenuController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerPrefsManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GameController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerMovement.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\EnemyMonster.cs" Line="18" Column="1" />
+      <File FileName="Assets\Scripts\PlayerClass.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Combat\EnemyCombatController.cs" Line="14" Column="1" />
+      <File FileName="Assets\Scripts\Combat\PlayerCombatController.cs" Line="37" Column="9" />
+      <File FileName="Assets\Scripts\Combat\PlayerEnergyBar.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Combat\EnemyActionBar.cs" Line="32" Column="22" />
+      <File FileName="Assets\Scripts\Combat\EnemyHealthBar.cs" Line="31" Column="50" />
+      <File FileName="Assets\Scripts\Combat\EnemyStatusController.cs" Line="19" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

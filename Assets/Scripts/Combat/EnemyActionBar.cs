@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UI; 
 using System.Collections;
 
 public class EnemyActionBar : MonoBehaviour {
@@ -15,7 +15,6 @@ public class EnemyActionBar : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
-		secondsBetweenActions = enemyMonster.GetSecondsBetweenActions();
 		enemyCombatController = GameObject.FindObjectOfType<EnemyCombatController>();
 
 		actionBarImage = GetComponent<Image>();
@@ -23,9 +22,15 @@ public class EnemyActionBar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		enemyMonster.IncrementActionTimer(Time.deltaTime);
-		HandleActionBar ();
-		TakeAction ();
+		if (!enemyMonster) {
+			enemyMonster  = GameObject.FindObjectOfType<EnemyMonster>();
+		} else {
+			secondsBetweenActions = enemyMonster.GetSecondsBetweenActions();
+			enemyMonster.IncrementActionTimer(Time.deltaTime);
+			GetComponent<RectTransform>().anchoredPosition = new Vector2 (transform.position.x , enemyMonster.GetActionBarYPos());
+			TakeAction ();
+			HandleActionBar();
+		}
 	}
 	
 	void HandleActionBar () {

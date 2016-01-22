@@ -6,6 +6,7 @@ public class GameController : MonoBehaviour {
 	private GameObject overworld;
 	private GameObject battle;
 
+	private PlayerClass playerClass;
 	private PlayerMovement playerMovement;
 
 	public float distanceTilSpawnThreshold;
@@ -16,12 +17,13 @@ public class GameController : MonoBehaviour {
 		overworld = GameObject.Find("Overworld");
 		battle = GameObject.Find("Battle");
 		playerMovement = GameObject.FindObjectOfType<PlayerMovement>();
+		playerClass = GameObject.FindObjectOfType<PlayerClass>();
 		battle.SetActive(false);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (playerMovement.GetDistanceTraveled() >= distanceTilSpawnThreshold && Random.value < probabilityOfMonsterAttackPerFrame) {
+		if (playerMovement.GetDistanceTraveled() >= distanceTilSpawnThreshold && Random.value < probabilityOfMonsterAttackPerFrame && playerMovement.PlayerIsMoving()) {
 			playerMovement.ResetDistanceTraveled();
 			TransitionToBattle();
 		}
@@ -41,6 +43,14 @@ public class GameController : MonoBehaviour {
 		battle.SetActive(true);
 	}
 
-		
-	
+	public void SaveGame () {
+		PlayerPrefsManager.SaveGame(playerClass.GetPlayerLevel(), playerClass.GetCurrentExperiencePoints(), playerClass.GetCurrentHealth(), playerMovement.GetLastKnowPosition());
+	}
+
+	public void LoadGame () {
+		playerClass.SetPlayerLevel(PlayerPrefsManager.GetPlayerLevel());
+		playerClass.SetCurrentExperiencePoints(PlayerPrefsManager.GetPlayerCurrentExperiencePoints());
+		playerClass.SetCurrentHealth(PlayerPrefsManager.GetPlayerCurrentHealth());
+		playerMovement.SetPlayerPosition(PlayerPrefsManager.GetPlayerLastKnowPosition());
+	}
 }

@@ -17,6 +17,10 @@ public class PlayerCombatController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (!enemyMonster) {
+			enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
+		}
+
 		if (Input.GetMouseButtonDown(0) && eventSystem.currentSelectedGameObject == null && !eventSystem.IsPointerOverGameObject()) {
 			playerClass.ChargeEnergy();
 		}
@@ -28,7 +32,12 @@ public class PlayerCombatController : MonoBehaviour {
 		if (playerClass.GetCurrentEnergy() >= skillCost) {
 			playerClass.UseEnergy(skillCost);
 
-			float damage = playerClass.GetSkill1 ().GetBaseDamage();
+			float damage = playerClass.GetSkill1 ().GetBaseDamage() * playerClass.GetAttackStat();
+
+//	TODO	if (Random.value < skill status effect probability) {
+//				apply status effect to enemy
+//				and update status effect indicator
+//			}
 
 			enemyMonster.TakeDamage(damage);
 		}

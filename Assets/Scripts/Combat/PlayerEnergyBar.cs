@@ -25,6 +25,8 @@ public class PlayerEnergyBar : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		currentEnergy = playerClass.GetCurrentEnergy();
+		maxEnergy = playerClass.GetMaxEnergy();
+
 		
 		HandleEnergyBar ();
 	}

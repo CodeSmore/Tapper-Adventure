@@ -45,9 +45,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\EnemyActionBar.cs" />
-     <Compile Include="Assets\Scripts\EnemyCombatController.cs" />
-     <Compile Include="Assets\Scripts\EnemyHealthBar.cs" />
+     <Compile Include="Assets\Scripts\Combat\BattleResultsController.cs" />
+     <Compile Include="Assets\Scripts\Combat\EnemyActionBar.cs" />
+     <Compile Include="Assets\Scripts\Combat\EnemyCombatController.cs" />
+     <Compile Include="Assets\Scripts\Combat\EnemyHealthBar.cs" />
+     <Compile Include="Assets\Scripts\Combat\EnemySpawnerController.cs" />
+     <Compile Include="Assets\Scripts\Combat\EnemyStatusController.cs" />
+     <Compile Include="Assets\Scripts\Combat\PlayerCombatController.cs" />
+     <Compile Include="Assets\Scripts\Combat\PlayerEnergyBar.cs" />
+     <Compile Include="Assets\Scripts\Combat\PlayerHealthBar.cs" />
      <Compile Include="Assets\Scripts\EnemyMonster.cs" />
      <Compile Include="Assets\Scripts\FadeTextureController.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
@@ -56,10 +62,8 @@
      <Compile Include="Assets\Scripts\MusicPlayer.cs" />
      <Compile Include="Assets\Scripts\PauseMenuController.cs" />
      <Compile Include="Assets\Scripts\PlayerClass.cs" />
-     <Compile Include="Assets\Scripts\PlayerCombatController.cs" />
-     <Compile Include="Assets\Scripts\PlayerEnergyBar.cs" />
-     <Compile Include="Assets\Scripts\PlayerHealthBar.cs" />
      <Compile Include="Assets\Scripts\PlayerMovement.cs" />
+     <Compile Include="Assets\Scripts\PlayerPrefsManager.cs" />
      <Compile Include="Assets\Scripts\SoundController.cs" />
      <Compile Include="Assets\Scripts\SplashManager.cs" />
  <Reference Include="UnityEngine.UI">

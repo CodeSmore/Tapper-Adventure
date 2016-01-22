@@ -19,7 +19,6 @@ public class PauseMenuController : MonoBehaviour {
 	public void TogglePauseMenu () {
 		pauseMenu.SetActive(!pauseMenu.activeSelf);
 
-		Time.timeScale = 0;
 		if (!pauseMenu.activeSelf) {
 			Time.timeScale = 1;
 		} else {
