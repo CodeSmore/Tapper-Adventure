@@ -37,7 +37,7 @@ public class PlayerClass : MonoBehaviour {
 	[Tooltip("Cost in energy points to use skill")]
 	public float energyCost1;
 	[Tooltip("Cooldown time after skill use")]
-	public float coolDownTime1;
+	public float cooldownTime1;
 	[Tooltip("Potential status effect of skill")]
 	public StatusEffect statusEffectOfSkill1;
 	[Tooltip("Chance of above status effect being applied")]
@@ -56,7 +56,7 @@ public class PlayerClass : MonoBehaviour {
 	[Tooltip("Cost in energy points to use skill")]
 	public float energyCost2;
 	[Tooltip("Cooldown time after skill use")]
-	public float coolDownTime2;
+	public float cooldownTime2;
 	[Tooltip("Potential status effect of skill")]
 	public StatusEffect statusEffectOfSkill2;
 	[Tooltip("Chance of above status effect being applied")]
@@ -76,7 +76,7 @@ public class PlayerClass : MonoBehaviour {
 	[Tooltip("Cost in energy points to use skill")]
 	public float energyCost3;
 	[Tooltip("Cooldown time after skill use")]
-	public float coolDownTime3;
+	public float cooldownTime3;
 	[Tooltip("Potential status effect of skill")]
 	public StatusEffect statusEffectOfSkill3;
 	[Tooltip("Chance of above status effect being applied")]
@@ -90,7 +90,7 @@ public class PlayerClass : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 // TODO instantiate all stats based on level-up formula
-		skill1 = new Skill (skillName1, levelOfSkill1, baseDamage1, energyCost1, coolDownTime1, statusEffectOfSkill1, chanceOfStatusEffect1, statusEffectDurationInSeconds1);
+		skill1 = new Skill (skillName1, levelOfSkill1, baseDamage1, energyCost1, cooldownTime1, statusEffectOfSkill1, chanceOfStatusEffect1, statusEffectDurationInSeconds1);
 		currentHealth = maxHealth;
 		currentStatus = StatusEffect.None;
 	}
@@ -186,6 +186,14 @@ public class PlayerClass : MonoBehaviour {
 		return currentEnergy;
 	}
 
+	public StatusEffect GetCurrentStatus () {
+		return currentStatus;
+	}
+
+	public void SetCurrentStatus (StatusEffect newStatus) {
+		currentStatus = newStatus;
+	}
+
 	public float GetAttackStat () {
 		return attackStat;
 	}
@@ -196,17 +204,17 @@ public class Skill {
 	private int level;
 	private float baseDamage;
 	private float energyCost;
-	private float coolDown;
+	private float cooldown;
 	private StatusEffect statusEffect;
 	private float chanceOfEffect;
 	private float durationOfEffect;
 
-	public Skill (string theName = "", int theLevel = 1, float theBaseDamage = 1, float theEnergyCost = 1, float theCoolDown = 0, StatusEffect theStatusEffect = StatusEffect.None, float theChanceOfEffect = 0, float theDurationOfEffect = 0) {
+	public Skill (string theName = "", int theLevel = 1, float theBaseDamage = 1, float theEnergyCost = 1, float theCooldown = 0, StatusEffect theStatusEffect = StatusEffect.None, float theChanceOfEffect = 0, float theDurationOfEffect = 0) {
 		name = theName;
 		level = theLevel;
 		baseDamage = theBaseDamage;
 		energyCost = theEnergyCost;
-		coolDown = theCoolDown;
+		cooldown = theCooldown;
 		statusEffect = theStatusEffect;
 		chanceOfEffect = theChanceOfEffect;
 		durationOfEffect = theDurationOfEffect;
@@ -228,8 +236,8 @@ public class Skill {
 		return energyCost;
 	}
 
-	public float GetCoolDown () {
-		return coolDown;
+	public float GetCooldown () {
+		return cooldown;
 	}
 
 	public StatusEffect GetStatusEffect () {

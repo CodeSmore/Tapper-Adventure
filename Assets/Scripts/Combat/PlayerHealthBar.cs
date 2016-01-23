@@ -7,6 +7,7 @@ public class PlayerHealthBar : MonoBehaviour {
 	private float currentHealth;
 	private float maxHealth;
 	private float healthRatio;
+	private float poisTimer;
 	
 	private Image healthBarImage;
 	private Text playerHealthText;
@@ -26,6 +27,17 @@ public class PlayerHealthBar : MonoBehaviour {
 	void Update () {
 		currentHealth = playerClass.GetCurrentHealth();
 		maxHealth = playerClass.GetMaxHealth();
+
+		if (playerClass.GetCurrentStatus() == StatusEffect.Pois) {
+			poisTimer += Time.deltaTime;
+
+			if (poisTimer >= 2) {
+				poisTimer = 0;
+
+				int poisDamage = Mathf.CeilToInt(playerClass.GetMaxHealth() * .035f);
+				playerClass.TakeDamage(poisDamage);
+			}
+		}
 	
 		HandleHealthBar ();
 	}

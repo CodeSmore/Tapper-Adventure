@@ -28,7 +28,7 @@ public class EnemySpawnerController : MonoBehaviour {
 		} else if (rand < .5) {
 			enemy = Instantiate(grassLandEnemy2) as GameObject;
 		} else {
-			enemy = Instantiate(grassLandEnemy2) as GameObject;
+			enemy = Instantiate(grassLandEnemy1) as GameObject;
 		}
 		enemy.transform.parent = transform;
 

@@ -26,7 +26,14 @@ public class EnemyActionBar : MonoBehaviour {
 			enemyMonster  = GameObject.FindObjectOfType<EnemyMonster>();
 		} else {
 			secondsBetweenActions = enemyMonster.GetSecondsBetweenActions();
-			enemyMonster.IncrementActionTimer(Time.deltaTime);
+
+			// handles status effects
+			if (enemyMonster.GetCurrentStatus() == StatusEffect.Slow) {
+				enemyMonster.IncrementActionTimer(Time.deltaTime / 2);
+			} else if (enemyMonster.GetCurrentStatus() != StatusEffect.Para) {
+				enemyMonster.IncrementActionTimer(Time.deltaTime);
+			}
+
 			GetComponent<RectTransform>().anchoredPosition = new Vector2 (transform.position.x , enemyMonster.GetActionBarYPos());
 			TakeAction ();
 			HandleActionBar();

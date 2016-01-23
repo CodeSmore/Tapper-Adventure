@@ -7,6 +7,7 @@ public class EnemyHealthBar : MonoBehaviour {
 	private float currentHealth;
 	private float maxHealth;
 	private float healthRatio;
+	private float poisTimer = 0;
 	
 	private Image healthBarImage;
 	
@@ -27,6 +28,17 @@ public class EnemyHealthBar : MonoBehaviour {
 		} else {
 			maxHealth = enemyMonster.GetMaxHealth();
 			currentHealth = enemyMonster.GetCurrentHealth();
+
+			if (enemyMonster.GetCurrentStatus() == StatusEffect.Pois) {
+				poisTimer += Time.deltaTime;
+
+				if (poisTimer >= 2) {
+					poisTimer = 0;
+
+					int poisDamage = Mathf.CeilToInt(enemyMonster.GetMaxHealth() * .035f);
+					enemyMonster.TakeDamage(poisDamage);
+				}
+			}
 
 			GetComponent<RectTransform>().anchoredPosition = new Vector2 (transform.position.x , enemyMonster.GetHealthBarYPos());
 

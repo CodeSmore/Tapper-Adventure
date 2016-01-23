@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
@@ -7,12 +8,14 @@ public class PlayerCombatController : MonoBehaviour {
 	private PlayerClass playerClass;
 	private EnemyMonster enemyMonster;
 	private EventSystem eventSystem;
+	private EnemyStatusController enemyStatusController;
 
 	// Use this for initialization
 	void Start () {
 		playerClass = GameObject.FindObjectOfType<PlayerClass>();	
 		enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
 		eventSystem = GameObject.FindObjectOfType<EventSystem>();
+		enemyStatusController = GameObject.FindObjectOfType<EnemyStatusController>();
 	}
 	
 	// Update is called once per frame
@@ -22,30 +25,37 @@ public class PlayerCombatController : MonoBehaviour {
 		}
 
 		if (Input.GetMouseButtonDown(0) && eventSystem.currentSelectedGameObject == null && !eventSystem.IsPointerOverGameObject()) {
-			playerClass.ChargeEnergy();
+			if (playerClass.GetCurrentStatus() == StatusEffect.Para) {
+				if (Random.value < .4) { // if player is paralyzed, taps work only sometimes
+					playerClass.ChargeEnergy();
+
+				}
+			} else {
+				playerClass.ChargeEnergy();
+			}
 		}
 	}
 
 	public void UseSkill1 () {
-		float skillCost = playerClass.GetSkill1().GetEnergyCost();
+		Skill skill = playerClass.GetSkill1();
+		float skillCost = skill.GetEnergyCost();
 
 		if (playerClass.GetCurrentEnergy() >= skillCost) {
+			
 			playerClass.UseEnergy(skillCost);
 
-			float damage = playerClass.GetSkill1 ().GetBaseDamage() * playerClass.GetAttackStat();
+			float damage = skill.GetBaseDamage() * playerClass.GetAttackStat();
 
-//	TODO	if (Random.value < skill status effect probability) {
-//				apply status effect to enemy
-//				and update status effect indicator
-//			}
+			if (Random.value < skill.GetChanceOfEffect()) {
+				enemyMonster.SetCurrentStatus(skill.GetStatusEffect());
+				enemyStatusController.StartStatusEffectTimer();
+			}
 
 			enemyMonster.TakeDamage(damage);
-		}
 
-
-		// TODO 
-		// disable skill until cooldown is complete
-		// use a cooldown timer for EACH skill
+			// Cooldown
+			GameObject.Find("Skill 1 Button").GetComponent<CooldownController>().StartCooldown(skill.GetCooldown());
+		} 
 	}
 
 	public void UseSkill2 () {}

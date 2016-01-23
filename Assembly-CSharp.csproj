@@ -45,6 +45,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\CooldownController.cs" />
+     <Compile Include="Assets\PlayerStatusController.cs" />
      <Compile Include="Assets\Scripts\Combat\BattleResultsController.cs" />
      <Compile Include="Assets\Scripts\Combat\EnemyActionBar.cs" />
      <Compile Include="Assets\Scripts\Combat\EnemyCombatController.cs" />

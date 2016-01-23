@@ -5,7 +5,7 @@ public class EnemyMonster : MonoBehaviour {
 
 	public float currentHealth;
 	public float maxHealth;
-	public StatusEffect currentStatus;
+	public StatusEffect currentStatus = StatusEffect.None;
 	public float secondsBetweenActions;
 	private float actionTimer;
 	public float actionDamage;
@@ -33,6 +33,14 @@ public class EnemyMonster : MonoBehaviour {
 
 	public float GetMaxHealth () {
 		return maxHealth;
+	}
+
+	public StatusEffect GetCurrentStatus () {
+		return currentStatus;
+	}
+
+	public void SetCurrentStatus (StatusEffect newStatus) {
+		currentStatus = newStatus;
 	}
 
 	public float GetSecondsBetweenActions () {
