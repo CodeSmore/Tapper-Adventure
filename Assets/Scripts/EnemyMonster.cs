@@ -3,19 +3,38 @@ using System.Collections;
 
 public class EnemyMonster : MonoBehaviour {
 
+	[Header("Stats", order = 0)]
 	public float currentHealth;
 	public float maxHealth;
 	public StatusEffect currentStatus = StatusEffect.None;
-	public float secondsBetweenActions;
-	private float actionTimer;
-	public float actionDamage;
-	public StatusEffect actionStatusEffect;
-	public float statusEffectChance;
-	public float experienceReward;
 
+	public float experienceReward;
 	public float HealthBarYPos;
 	public float ActionBarYPos;
 
+	[Header("-------", order = 0)]
+	[Header("", order = 1)]
+	[Header("Skill 1", order = 2)]
+
+	public float actionDamage;
+	public StatusEffect actionStatusEffect;
+	public float statusEffectChance;
+	public float secondsBetweenActions;
+
+	[Header("-------", order = 0)]
+	[Header("", order = 1)]
+	public bool hasSecondAttack;
+
+	[Header("", order = 0)]
+	[Header("Skill 2", order = 1)]
+
+	public float actionDamage2;
+	public StatusEffect actionStatusEffect2;
+	public float statusEffectChance2;
+	public float secondsBetweenActions2;
+
+
+	private float actionTimer;
 
 	// Use this for initialization
 	void Start () {
@@ -93,5 +112,25 @@ public class EnemyMonster : MonoBehaviour {
 
 	public float GetActionBarYPos () {
 		return ActionBarYPos;
+	}
+
+	public bool HasSecondSkill () {
+		return hasSecondAttack;
+	}
+
+	public float GetSecondsBetweenActions2 () {
+		return secondsBetweenActions2;
+	}
+
+	public float GetActionDamage2 () {
+		return actionDamage2;
+	}
+
+	public StatusEffect GetActionStatusEffect2 () {
+		return actionStatusEffect2;
+	}
+
+	public float GetStatusEffectChance2 () {
+		return statusEffectChance2;
 	}
 }

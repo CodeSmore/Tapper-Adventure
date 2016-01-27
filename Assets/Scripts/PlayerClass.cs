@@ -97,7 +97,7 @@ public class PlayerClass : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 
 	public Skill GetSkill1 () {
@@ -117,8 +117,19 @@ public class PlayerClass : MonoBehaviour {
 		maxHealth = baseHealth * playerLevel;
 		maxEnergy = baseEnergy * playerLevel;
 
-		// add addition HP and EP
+		// restore health and status
 		Heal (maxHealth);
+		currentStatus = StatusEffect.None;
+
+		// TODO move skill activiation to boss events
+		// TODO CREATE boss events script to handle them
+		if (playerLevel == 3) {
+			// activate skill
+			GameObject.Find("Skill 3").GetComponentInChildren<SkillButtonController>().ActivateButton();
+		} else if (playerLevel == 2) {
+			// activate skill
+			GameObject.Find("Skill 2").GetComponentInChildren<SkillButtonController>().ActivateButton();
+		} 
 	}
 
 	public void SetPlayerLevel (int level) {

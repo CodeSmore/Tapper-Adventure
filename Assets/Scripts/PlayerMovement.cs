@@ -5,7 +5,6 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour {
 
 	public float movementSpeed, padding;
-	private float xMin, xMax, yMin, yMax;
 	private float distanceTraveled;
 	private Vector3 lastKnownPosition;
 	private bool playerIsMoving;
@@ -19,11 +18,6 @@ public class PlayerMovement : MonoBehaviour {
 	void Start () {
 		overworldCamera = GetComponentInChildren<Camera>();
 		eventSystem = GameObject.FindObjectOfType<EventSystem>();
-
-		xMin = 0 + padding;
-		xMax = 18 - padding;
-		yMin = 0 + padding;
-		yMax = 8 - padding;
 
 		lastKnownPosition = transform.position;
 	}
@@ -49,14 +43,7 @@ public class PlayerMovement : MonoBehaviour {
 			),
 			Time.deltaTime * movementSpeed
 		);
-
-		playerPos = new Vector3 (
-			Mathf.Clamp (playerPos.x, xMin, xMax), 
-			Mathf.Clamp (playerPos.y, yMin, yMax), 
-			transform.position.z
-		);
-
-		
+			
 		transform.position = playerPos;
 	}
 

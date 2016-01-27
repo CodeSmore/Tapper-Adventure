@@ -71,10 +71,10 @@ public class BattleResultsController : MonoBehaviour {
 			levelUpHeader.SetActive(true);
 
 			// original stats set before level-up
-			levelOld.text = playerClass.GetPlayerLevel() + ""; // added '+ ""' due to error saying "cannot convert float/int to string"...such hogwash
-			HPOld.text = playerClass.GetMaxHealth() + "";
-			EPOld.text = playerClass.GetMaxEnergy() + "";
-			attackStatOld.text = playerClass.GetAttackStat() + "";
+			levelOld.text = playerClass.GetPlayerLevel().ToString(); 
+			HPOld.text = playerClass.GetMaxHealth().ToString();
+			EPOld.text = playerClass.GetMaxEnergy().ToString();
+			attackStatOld.text = playerClass.GetAttackStat().ToString();
 
 			playerClass.LevelUp();
 			// TODO create method that resets all relevant variables when a level-up occurs 
@@ -88,7 +88,6 @@ public class BattleResultsController : MonoBehaviour {
 			HPNew.text = playerClass.GetMaxHealth() + "";
 			EPNew.text = playerClass.GetMaxEnergy() + "";
 			attackStatNew.text = playerClass.GetAttackStat() + "";
-		}
-
+		} 
 	}
 }

@@ -54,7 +54,7 @@ public class PlayerCombatController : MonoBehaviour {
 			enemyMonster.TakeDamage(damage);
 
 			// Cooldown
-			GameObject.Find("Skill 1 Button").GetComponent<CooldownController>().StartCooldown(skill.GetCooldown());
+			GameObject.Find("Skill 1 Button").GetComponent<SkillButtonController>().StartCooldown(skill.GetCooldown());
 		} 
 	}
 

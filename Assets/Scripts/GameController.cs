@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour {
 
 	private PlayerClass playerClass;
 	private PlayerMovement playerMovement;
+	private EnemySpawnerController enemySpawnerController;
 
 	public float distanceTilSpawnThreshold;
 	private float probabilityOfMonsterAttackPerFrame = 0.01f;
@@ -18,6 +19,7 @@ public class GameController : MonoBehaviour {
 		battle = GameObject.Find("Battle");
 		playerMovement = GameObject.FindObjectOfType<PlayerMovement>();
 		playerClass = GameObject.FindObjectOfType<PlayerClass>();
+		enemySpawnerController = GameObject.FindObjectOfType<EnemySpawnerController>();
 		battle.SetActive(false);
 	}
 	
@@ -36,11 +38,14 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void TransitionToBattle () {
-		// TODO spawn enemy
-
 		// disable overworld, enable battle
 		overworld.SetActive(false);
 		battle.SetActive(true);
+
+		// TODO spawn enemy
+		if (!GameObject.FindObjectOfType<EnemyMonster>()) {
+			enemySpawnerController.Spawn();
+		}
 	}
 
 	public void SaveGame () {

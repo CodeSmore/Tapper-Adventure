@@ -6,12 +6,14 @@ public class EnemyCombatController : MonoBehaviour {
 	private EnemyMonster enemyMonster;
 	private PlayerClass playerClass;
 	private GameObject battleResultsPanel;
+	private PlayerStatusController playerStatusController;
 
 	private bool enemyIsConsumed = false;
 
 	void Awake () {
 		battleResultsPanel = GameObject.FindObjectOfType<BattleResultsController>().gameObject;
 		battleResultsPanel.SetActive(false);
+		playerStatusController = GameObject.FindObjectOfType<PlayerStatusController>();
 	}
 
 	// Use this for initialization
@@ -31,7 +33,6 @@ public class EnemyCombatController : MonoBehaviour {
 
 		} else {
 			enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
-
 		}
 	}
 
@@ -50,11 +51,25 @@ public class EnemyCombatController : MonoBehaviour {
 		}
 	}
 
-	public void Attack () {
+	public void UseSkill1 () {
 		playerClass.TakeDamage (enemyMonster.GetActionDamage());
 
 		if (enemyMonster.GetActionStatusEffect() != StatusEffect.None) {
-			playerClass.SetCurrentStatus(enemyMonster.GetActionStatusEffect());
+			if (Random.value <= enemyMonster.GetStatusEffectChance()) {
+				playerClass.SetCurrentStatus(enemyMonster.GetActionStatusEffect());
+				playerStatusController.StartStatusEffectTimer();
+			}
+		}
+	}
+
+	public void UseSkill2 () {
+		playerClass.TakeDamage (enemyMonster.GetActionDamage2());
+
+		if (enemyMonster.GetActionStatusEffect2() != StatusEffect.None) {
+			if (Random.value <= enemyMonster.GetStatusEffectChance2()) {
+				playerClass.SetCurrentStatus(enemyMonster.GetActionStatusEffect2());
+				playerStatusController.StartStatusEffectTimer();
+			}
 		}
 	}
 
