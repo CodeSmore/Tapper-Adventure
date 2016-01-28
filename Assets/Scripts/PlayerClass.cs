@@ -109,8 +109,9 @@ public class PlayerClass : MonoBehaviour {
 	}
 
 	public void LevelUp () {
-		playerLevel++;
 		ResetCurrentExperiencePoints();
+		playerLevel++;
+
 
 		// increase stats
 		attackStat = baseAttackStat + playerLevel - 1;
@@ -126,10 +127,16 @@ public class PlayerClass : MonoBehaviour {
 		if (playerLevel == 3) {
 			// activate skill
 			GameObject.Find("Skill 3").GetComponentInChildren<SkillButtonController>().ActivateButton();
+			GameObject.Find("Skill 3").GetComponentInChildren<SkillButtonController>().Unlock();
 		} else if (playerLevel == 2) {
 			// activate skill
 			GameObject.Find("Skill 2").GetComponentInChildren<SkillButtonController>().ActivateButton();
+			GameObject.Find("Skill 2").GetComponentInChildren<SkillButtonController>().Unlock();
 		} 
+
+		if (currentExperiencePoints >= GetExperiencePointsForNextLevel()) {
+			LevelUp();
+		}
 	}
 
 	public void SetPlayerLevel (int level) {
@@ -141,7 +148,7 @@ public class PlayerClass : MonoBehaviour {
 	}
 
 	public void ResetCurrentExperiencePoints () {
-		currentExperiencePoints = 0;
+		currentExperiencePoints -= GetExperiencePointsForNextLevel();
 	}
 
 	public float GetExperiencePointsForNextLevel () {

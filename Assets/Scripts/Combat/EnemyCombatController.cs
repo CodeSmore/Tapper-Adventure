@@ -7,6 +7,7 @@ public class EnemyCombatController : MonoBehaviour {
 	private PlayerClass playerClass;
 	private GameObject battleResultsPanel;
 	private PlayerStatusController playerStatusController;
+	private EnemyActionBar enemyActionBar;
 
 	private bool enemyIsConsumed = false;
 
@@ -14,6 +15,7 @@ public class EnemyCombatController : MonoBehaviour {
 		battleResultsPanel = GameObject.FindObjectOfType<BattleResultsController>().gameObject;
 		battleResultsPanel.SetActive(false);
 		playerStatusController = GameObject.FindObjectOfType<PlayerStatusController>();
+		enemyActionBar = GameObject.FindObjectOfType<EnemyActionBar>();
 	}
 
 	// Use this for initialization
@@ -25,7 +27,7 @@ public class EnemyCombatController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (enemyMonster) {
-			if (enemyMonster.GetCurrentHealth() <= 0 ) {
+			if (enemyMonster.GetCurrentHealth() <= 0) {
 				EnemyDeath();				
 			} else if (enemyIsConsumed) {
 				enemyIsConsumed = false;
@@ -37,9 +39,10 @@ public class EnemyCombatController : MonoBehaviour {
 	}
 
 	void EnemyDeath () {
-		Time.timeScale = 0;
-
 		battleResultsPanel.SetActive(true);
+
+		// disable actionBar
+		enemyActionBar.gameObject.SetActive(false);
 
 		if (!enemyIsConsumed) {
 			// player eats enemyMonster

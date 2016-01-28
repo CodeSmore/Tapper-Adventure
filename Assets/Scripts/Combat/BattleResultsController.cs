@@ -13,6 +13,7 @@ public class BattleResultsController : MonoBehaviour {
 	private GameController gameController;
 	private GameObject pauseButton;
 	private EnemyActionBar enemyActionBar;
+	private SkillButtonController[] skillButtonController;
 
 	// Level Up Battle Results
 	public GameObject levelUpHeader;
@@ -24,15 +25,27 @@ public class BattleResultsController : MonoBehaviour {
 	public Text EPNew;
 	public Text attackStatOld;
 	public Text attackStatNew;
+	public GameObject tapToContinueObject;
+
+
+	private float resultsTimer;
+	public float enableTransitionTime;
+
+	void Awake () {
+		enemyActionBar = GameObject.FindObjectOfType<EnemyActionBar>();
+		playerClass = GameObject.FindObjectOfType<PlayerClass>();
+		skillButtonController = GameObject.FindObjectsOfType<SkillButtonController>();
+		levelUpHeader.SetActive(false);
+	}
 
 	// Use this for initialization
 	void Start () {
-		playerClass = GameObject.FindObjectOfType<PlayerClass>();
 		enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
 		gameController = GameObject.FindObjectOfType<GameController>();
 		pauseButton = GameObject.Find("Pause Button");
-		enemyActionBar = GameObject.FindObjectOfType<EnemyActionBar>();
-		levelUpHeader.SetActive(false);
+		tapToContinueObject.SetActive(false);
+
+		resultsTimer = 0;
 	}
 
 	void Update () {
@@ -43,24 +56,48 @@ public class BattleResultsController : MonoBehaviour {
 		if (!enemyMonster) {
 			enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
 		}
+
+		resultsTimer += Time.deltaTime;
+
+		if (resultsTimer > enableTransitionTime) {
+			tapToContinueObject.SetActive(true);
+		}
 	}
 
 	void OnMouseUp () {
-		enemyMonster.ResetHealth();
-		gameObject.SetActive(false);
+		if (resultsTimer > enableTransitionTime) {
+			enemyMonster.ResetHealth();
+			gameObject.SetActive(false);
 
-		Time.timeScale = 1;
+			tapToContinueObject.SetActive(false);
+			enemyActionBar.gameObject.SetActive(true);
 
-		enemyActionBar.ResetActionBar();
-		Destroy(enemyMonster.gameObject);
+			enemyActionBar.ResetActionBar();
+			Destroy(enemyMonster.gameObject);
 
-		pauseButton.SetActive(true);
-		// switch to overworld
-		gameController.TransitionToOverworld();
+			pauseButton.SetActive(true);
+			// switch to overworld
+			gameController.TransitionToOverworld();
+		}
 	}
 
 	void OnDisable () {
+		foreach (SkillButtonController controller in skillButtonController) {
+			if (controller.Unlocked()) {
+				controller.SetCooldownActive(true);
+			}	
+		}
+
+
 		levelUpHeader.SetActive(false);
+	}
+
+	void OnEnable () {
+		foreach (SkillButtonController controller in skillButtonController) {
+			if (controller.Unlocked()) {
+				controller.SetCooldownActive(false);
+			}	
+		}
 	}
 
 	public void UpdateBattleResults (float expGained, float totalExp, float expForNextLevel) {
@@ -77,17 +114,27 @@ public class BattleResultsController : MonoBehaviour {
 			attackStatOld.text = playerClass.GetAttackStat().ToString();
 
 			playerClass.LevelUp();
+
+			foreach (SkillButtonController controller in skillButtonController) {
+				if (controller.Unlocked()) {
+					controller.ActivateButton();
+					controller.EndCooldown();
+				}	
+			}
 			// TODO create method that resets all relevant variables when a level-up occurs 
 			// in order to avoid having to update them every update()
 
 
-			// displayer level up and stat increases
+			// display level up and stat increases
 
 			// post-level-up stats
-			levelNew.text = playerClass.GetPlayerLevel() + ""; 
-			HPNew.text = playerClass.GetMaxHealth() + "";
-			EPNew.text = playerClass.GetMaxEnergy() + "";
-			attackStatNew.text = playerClass.GetAttackStat() + "";
+			levelNew.text = playerClass.GetPlayerLevel().ToString(); 
+			HPNew.text = playerClass.GetMaxHealth().ToString();
+			EPNew.text = playerClass.GetMaxEnergy().ToString();
+			attackStatNew.text = playerClass.GetAttackStat().ToString();
 		} 
+
+		// start timer to keep screen up for a second
+		resultsTimer = 0;
 	}
 }
