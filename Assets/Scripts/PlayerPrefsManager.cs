@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerPrefsManager : MonoBehaviour {
 
-	// TODO bools (ints of 0 for false and 1 for true) for overworld events
+	// TODO bools (ints of 0 for false and 1 for true) for world events
 	// ex. HAS_KEY_TO_CASTLE_KEY
 
 	const string PLAYER_LEVEL_KEY = "player_level";

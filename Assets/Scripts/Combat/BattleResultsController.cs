@@ -76,8 +76,8 @@ public class BattleResultsController : MonoBehaviour {
 			Destroy(enemyMonster.gameObject);
 
 			pauseButton.SetActive(true);
-			// switch to overworld
-			gameController.TransitionToOverworld();
+			// switch to world
+			gameController.TransitionToWorld();
 		}
 	}
 

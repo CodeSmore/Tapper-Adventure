@@ -57,9 +57,11 @@
      <Compile Include="Assets\Scripts\Combat\PlayerHealthBar.cs" />
      <Compile Include="Assets\Scripts\Combat\PlayerStatusController.cs" />
      <Compile Include="Assets\Scripts\Combat\SkillButtonController.cs" />
+     <Compile Include="Assets\Scripts\Doorway.cs" />
      <Compile Include="Assets\Scripts\EnemyMonster.cs" />
      <Compile Include="Assets\Scripts\FadeTextureController.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
+     <Compile Include="Assets\Scripts\InteractionTextController.cs" />
      <Compile Include="Assets\Scripts\LevelManager.cs" />
      <Compile Include="Assets\Scripts\ModeTransitionController.cs" />
      <Compile Include="Assets\Scripts\MusicPlayer.cs" />

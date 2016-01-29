@@ -1,17 +1,20 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Combat\BattleResultsController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Combat\EnemySpawnerController.cs">
     <Files>
+      <File FileName="Assets\Scripts\PlayerInteractableController.cs" Line="57" Column="46" />
+      <File FileName="Assets\Scripts\InteractionTextController.cs" Line="6" Column="23" />
       <File FileName="Assets\Scripts\GameController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Combat\EnemySpawnerController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Combat\EnemySpawnerController.cs" Line="31" Column="5" />
       <File FileName="Assets\Scripts\EnemyMonster.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Combat\EnemyActionBar.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PlayerInteractableController.cs" Line="25" Column="13" />
-      <File FileName="Assets\Scripts\PlayerClass.cs" Line="127" Column="20" />
-      <File FileName="Assets\Scripts\Combat\EnemyCombatController.cs" Line="30" Column="19" />
-      <File FileName="Assets\Scripts\Combat\PlayerCombatController.cs" Line="57" Column="76" />
-      <File FileName="Assets\Scripts\Combat\BattleResultsController.cs" Line="119" Column="30" />
-      <File FileName="Assets\Scripts\Combat\SkillButtonController.cs" Line="73" Column="13" />
+      <File FileName="Assets\Scripts\PlayerClass.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Combat\EnemyCombatController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Combat\PlayerCombatController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Combat\BattleResultsController.cs" Line="76" Column="37" />
+      <File FileName="Assets\Scripts\Combat\SkillButtonController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Combat\EnemyStatusController.cs" Line="27" Column="95" />
+      <File FileName="Assets\Scripts\PlayerMovement.cs" Line="35" Column="19" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

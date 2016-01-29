@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ModeTransitionController : MonoBehaviour { // Controls the transition between overworld, battle, and menu
+public class ModeTransitionController : MonoBehaviour { // Controls the transition between world, battle, and menu
 
 	GameObject menu;
 

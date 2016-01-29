@@ -3,9 +3,10 @@ using System.Collections;
 
 public class EnemySpawnerController : MonoBehaviour {
 
-	public GameObject grassLandEnemy1;
-	public GameObject grassLandEnemy2;
-	public GameObject grassLandEnemy3;
+	public GameObject grasslandEnemy1;
+	public GameObject grasslandEnemy2;
+	public GameObject grasslandEnemy3;
+	public GameObject forestEnemy1;
 
 
 
@@ -19,13 +20,17 @@ public class EnemySpawnerController : MonoBehaviour {
 
 		if (spawnType == "Grassland") {
 			if (rand < .15) {
-				enemy = Instantiate(grassLandEnemy3) as GameObject;
+				enemy = Instantiate(grasslandEnemy3) as GameObject;
 			} else if (rand < .5) {
-				enemy = Instantiate(grassLandEnemy2) as GameObject;
+				enemy = Instantiate(grasslandEnemy2) as GameObject;
 			} else {
-				enemy = Instantiate(grassLandEnemy1) as GameObject;
+				enemy = Instantiate(grasslandEnemy1) as GameObject;
 			}
+		} else if (spawnType == "Forest") {
+			enemy = Instantiate(forestEnemy1) as GameObject;
 		} else if (spawnType == "Bridge Boss Encounter") {
+			enemy = Instantiate (bridgeBoss) as GameObject;
+		} else {
 			enemy = Instantiate (bridgeBoss) as GameObject;
 		}
 

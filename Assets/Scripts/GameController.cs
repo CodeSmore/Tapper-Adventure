@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 
-	private GameObject overworld;
+	private GameObject world;
 	private GameObject battle;
 
 	private PlayerClass playerClass;
@@ -15,7 +15,7 @@ public class GameController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		overworld = GameObject.Find("Overworld");
+		world = GameObject.Find("World");
 		battle = GameObject.Find("Battle");
 		playerMovement = GameObject.FindObjectOfType<PlayerMovement>();
 		playerClass = GameObject.FindObjectOfType<PlayerClass>();
@@ -31,15 +31,15 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
-	public void TransitionToOverworld () {
-		// disable battle, enable overworld
+	public void TransitionToWorld () {
+		// disable battle, enable world
 		battle.SetActive(false);
-		overworld.SetActive(true);
+		world.SetActive(true);
 	}
 
 	public void TransitionToBattle () {
-		// disable overworld, enable battle
-		overworld.SetActive(false);
+		// disable world, enable battle
+		world.SetActive(false);
 		battle.SetActive(true);
 
 		// TODO spawn enemy

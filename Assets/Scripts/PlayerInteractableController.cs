@@ -7,6 +7,8 @@ public class PlayerInteractableController : MonoBehaviour {
 	private EnemySpawnerController enemySpawnerController;
 	private GameController gameController;
 	private Button interactButton;
+	private GameObject textBox;
+	private InteractionTextController textController;
 
 	private GameObject triggerHit;
 
@@ -16,6 +18,9 @@ public class PlayerInteractableController : MonoBehaviour {
 		gameController = GameObject.FindObjectOfType<GameController>();
 		interactButton = GameObject.Find("Interact Button").GetComponent<Button>();
 		interactButton.interactable = false;
+		textBox = GameObject.Find("Text Box");
+		textBox.SetActive(false);
+		textController = GameObject.FindObjectOfType<InteractionTextController>();
 	}
 	
 	// Update is called once per frame
@@ -26,15 +31,19 @@ public class PlayerInteractableController : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D collider) {
 		triggerHit = collider.gameObject;
 
+		if (triggerHit.tag == "Interactable") {
+			interactButton.interactable = true;
+		} else if (triggerHit.tag == "SpawnArea") {
+			enemySpawnerController.SetSpawnType(triggerHit.name);
+		}
+
 		if (triggerHit.name == "Bridge Boss Encounter") {
 			gameController.TransitionToBattle();
 			collider.gameObject.SetActive(false);
 		}
 
-		if (triggerHit.tag == "Interactable") {
-			interactButton.interactable = true;
-		} else if (triggerHit.tag == "SpawnArea") {
-			enemySpawnerController.SetSpawnType(triggerHit.name);
+		if (triggerHit.tag == "Doorway") {
+			gameObject.transform.position = collider.GetComponent<Doorway>().GetDestinationVector();
 		}
 	}
 
@@ -46,8 +55,11 @@ public class PlayerInteractableController : MonoBehaviour {
 	}
 
 	public void Interact () {
-		if (triggerHit.name == "Sample Talker") {
-			Debug.Log("Talking to Papercut");
-		}
+		textBox.SetActive(true);
+		textController.UpdateText(triggerHit.name);
+	}
+
+	public void DeactivateTextBox () {
+		textBox.SetActive(false);
 	}
 }
