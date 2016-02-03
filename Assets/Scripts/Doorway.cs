@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Doorway : MonoBehaviour {
 
-	public Vector3 destinationVector;
+	public GameObject destination;
 
 	public Vector3 GetDestinationVector () {
-		return destinationVector;
+		return destination.transform.position;
 	}
 }

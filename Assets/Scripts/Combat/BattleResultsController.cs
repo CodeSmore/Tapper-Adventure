@@ -35,12 +35,12 @@ public class BattleResultsController : MonoBehaviour {
 		enemyActionBar = GameObject.FindObjectOfType<EnemyActionBar>();
 		playerClass = GameObject.FindObjectOfType<PlayerClass>();
 		skillButtonController = GameObject.FindObjectsOfType<SkillButtonController>();
+		enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
 		levelUpHeader.SetActive(false);
 	}
 
 	// Use this for initialization
 	void Start () {
-		enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
 		gameController = GameObject.FindObjectOfType<GameController>();
 		pauseButton = GameObject.Find("Pause Button");
 		tapToContinueObject.SetActive(false);
@@ -64,19 +64,22 @@ public class BattleResultsController : MonoBehaviour {
 		}
 	}
 
+	public void EndOfBattlePreparations () {
+		enemyMonster.ResetHealth();
+
+		tapToContinueObject.SetActive(false);
+		enemyActionBar.gameObject.SetActive(true);
+
+		enemyActionBar.ResetActionBar();
+		Destroy(enemyMonster.gameObject);
+
+		pauseButton.SetActive(true);
+		gameObject.SetActive(false);
+	}
+
 	void OnMouseUp () {
 		if (resultsTimer > enableTransitionTime) {
-			enemyMonster.ResetHealth();
-			gameObject.SetActive(false);
-
-			tapToContinueObject.SetActive(false);
-			enemyActionBar.gameObject.SetActive(true);
-
-			enemyActionBar.ResetActionBar();
-			Destroy(enemyMonster.gameObject);
-
-			pauseButton.SetActive(true);
-			// switch to world
+			// trigger
 			gameController.TransitionToWorld();
 		}
 	}
@@ -87,7 +90,6 @@ public class BattleResultsController : MonoBehaviour {
 				controller.SetCooldownActive(true);
 			}	
 		}
-
 
 		levelUpHeader.SetActive(false);
 	}

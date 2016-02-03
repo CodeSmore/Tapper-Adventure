@@ -6,6 +6,10 @@ public enum StatusEffect {None, Para, Pois, Slow};
 public class PlayerClass : MonoBehaviour {
 
 	[Header("Class Stats")]
+	public Sprite monsterSprite;
+	public string monsterName;
+	public string monsterSpecies;
+	public string monsterDescription;
 	public float currentHealth;
 	public float maxHealth;
 	public StatusEffect currentStatus;
@@ -28,6 +32,8 @@ public class PlayerClass : MonoBehaviour {
 	[Header("-------", order = 1)]
 
 	[Header("Skill 1", order = 2)]
+	public bool skillUnlocked1;
+	public Sprite skillSprite1;
 	[Tooltip("Name of skill as a string")]
 	public string skillName1;
 	[Tooltip("Skill level as an int")]
@@ -47,6 +53,8 @@ public class PlayerClass : MonoBehaviour {
 	[Header("-------", order = 2)]
 
 	[Header("Skill 2", order = 3)]
+	public bool skillUnlocked2;
+	public Sprite skillSprite2;
 	[Tooltip("Name of skill as a string")]
 	public string skillName2;
 	[Tooltip("Skill level as an int")]
@@ -67,6 +75,8 @@ public class PlayerClass : MonoBehaviour {
 
 
 	[Header("Skill 3", order = 4)]
+	public bool skillUnlocked3;
+	public Sprite skillSprite3;
 	[Tooltip("Name of skill as a string")]
 	public string skillName3;
 	[Tooltip("Skill level as an int")]
@@ -90,7 +100,7 @@ public class PlayerClass : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 // TODO instantiate all stats based on level-up formula
-		skill1 = new Skill (skillName1, levelOfSkill1, baseDamage1, energyCost1, cooldownTime1, statusEffectOfSkill1, chanceOfStatusEffect1, statusEffectDurationInSeconds1);
+		skill1 = new Skill (skillSprite1, skillName1, levelOfSkill1, baseDamage1, energyCost1, cooldownTime1, statusEffectOfSkill1, chanceOfStatusEffect1, statusEffectDurationInSeconds1);
 		currentHealth = maxHealth;
 		currentStatus = StatusEffect.None;
 	}
@@ -128,10 +138,12 @@ public class PlayerClass : MonoBehaviour {
 			// activate skill
 			GameObject.Find("Skill 3").GetComponentInChildren<SkillButtonController>().ActivateButton();
 			GameObject.Find("Skill 3").GetComponentInChildren<SkillButtonController>().Unlock();
+			skillUnlocked3 = true;
 		} else if (playerLevel == 2) {
 			// activate skill
 			GameObject.Find("Skill 2").GetComponentInChildren<SkillButtonController>().ActivateButton();
 			GameObject.Find("Skill 2").GetComponentInChildren<SkillButtonController>().Unlock();
+			skillUnlocked2 = true;
 		} 
 
 		if (currentExperiencePoints >= GetExperiencePointsForNextLevel()) {
@@ -215,9 +227,38 @@ public class PlayerClass : MonoBehaviour {
 	public float GetAttackStat () {
 		return attackStat;
 	}
+
+	public string GetName () {
+		return monsterName;
+	}
+
+	public string GetSpecies () {
+		return monsterSpecies;
+	}
+
+	public string GetDescription () {
+		return monsterDescription;
+	}
+
+	public Sprite GetMonsterSprite () {
+		return monsterSprite;
+	}
+
+	public bool SkillOneUnlocked () {
+		return skillUnlocked1;
+	}
+
+	public bool SkillTwoUnlocked () {
+		return skillUnlocked2;
+	}
+
+	public bool SkillThreeUnlocked () {
+		return skillUnlocked3;
+	}
 }
 
 public class Skill {
+	private Sprite sprite;
 	private string name;
 	private int level;
 	private float baseDamage;
@@ -227,7 +268,8 @@ public class Skill {
 	private float chanceOfEffect;
 	private float durationOfEffect;
 
-	public Skill (string theName = "", int theLevel = 1, float theBaseDamage = 1, float theEnergyCost = 1, float theCooldown = 0, StatusEffect theStatusEffect = StatusEffect.None, float theChanceOfEffect = 0, float theDurationOfEffect = 0) {
+	public Skill (Sprite skillSprite = null, string theName = "", int theLevel = 1, float theBaseDamage = 1, float theEnergyCost = 1, float theCooldown = 0, StatusEffect theStatusEffect = StatusEffect.None, float theChanceOfEffect = 0, float theDurationOfEffect = 0) {
+		sprite = skillSprite;
 		name = theName;
 		level = theLevel;
 		baseDamage = theBaseDamage;
@@ -238,6 +280,9 @@ public class Skill {
 		durationOfEffect = theDurationOfEffect;
 	}
 
+	public Sprite GetSprite () {
+		return sprite;
+	}
 	public string GetName () {
 		return name;
 	}

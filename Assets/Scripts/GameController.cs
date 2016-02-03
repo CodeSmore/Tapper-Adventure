@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class GameController : MonoBehaviour {
@@ -9,6 +10,8 @@ public class GameController : MonoBehaviour {
 	private PlayerClass playerClass;
 	private PlayerMovement playerMovement;
 	private EnemySpawnerController enemySpawnerController;
+	private GameObject transitionPanel;
+	private EnemyActionBar actionBar;
 
 	public float distanceTilSpawnThreshold;
 	private float probabilityOfMonsterAttackPerFrame = 0.01f;
@@ -20,6 +23,8 @@ public class GameController : MonoBehaviour {
 		playerMovement = GameObject.FindObjectOfType<PlayerMovement>();
 		playerClass = GameObject.FindObjectOfType<PlayerClass>();
 		enemySpawnerController = GameObject.FindObjectOfType<EnemySpawnerController>();
+		transitionPanel = GameObject.Find("Transition Panel");
+		actionBar = GameObject.FindObjectOfType<EnemyActionBar>();
 		battle.SetActive(false);
 	}
 	
@@ -32,20 +37,27 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void TransitionToWorld () {
-		// disable battle, enable world
-		battle.SetActive(false);
-		world.SetActive(true);
+		transitionPanel.GetComponent<Image>().fillMethod = Image.FillMethod.Vertical;
+		transitionPanel.GetComponent<Image>().fillOrigin = 1; // top
+		transitionPanel.GetComponent<Animator>().SetTrigger("WorldTransitionTrigger");
 	}
 
 	public void TransitionToBattle () {
+		playerMovement.SetMovementIsEnabled(false);
 		// disable world, enable battle
-		world.SetActive(false);
-		battle.SetActive(true);
+		transitionPanel.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
+		transitionPanel.GetComponent<Animator>().SetTrigger("BattleTransitionTrigger");
+		// disable energy gain and cooldown til end of trigger
 
-		// TODO spawn enemy
+
 		if (!GameObject.FindObjectOfType<EnemyMonster>()) {
 			enemySpawnerController.Spawn();
 		}
+	}
+
+	public void ToggleCurrentMode () {
+		world.SetActive(!world.activeSelf);
+		battle.SetActive(!battle.activeSelf);
 	}
 
 	public void SaveGame () {

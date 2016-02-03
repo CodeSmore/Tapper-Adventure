@@ -133,4 +133,6 @@ public class EnemyMonster : MonoBehaviour {
 	public float GetStatusEffectChance2 () {
 		return statusEffectChance2;
 	}
+
+	void OnDestroy () {}
 }

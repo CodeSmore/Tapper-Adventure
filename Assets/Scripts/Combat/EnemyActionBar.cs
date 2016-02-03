@@ -8,6 +8,7 @@ public class EnemyActionBar : MonoBehaviour {
 	private float actionBarRatio;
 	private float randomChanceOfSecondSkill;
 	private bool usingSecondSkill = false;
+	private bool actionEnabled = false;
 	private float colorTimer = 0;
 
 	public float chanceToUseSecondSkill;
@@ -26,12 +27,16 @@ public class EnemyActionBar : MonoBehaviour {
 
 		randomChanceOfSecondSkill = Random.value;
 	}
+
+	void OnDisable () {
+		actionEnabled = false;
+	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (!enemyMonster) {
 			enemyMonster  = GameObject.FindObjectOfType<EnemyMonster>();
-		} else {
+		} else if (actionEnabled) {
 
 			if (enemyMonster.HasSecondSkill() && randomChanceOfSecondSkill < chanceToUseSecondSkill) {
 				usingSecondSkill = true;
@@ -101,5 +106,9 @@ public class EnemyActionBar : MonoBehaviour {
 		secondsBetweenActions = enemyMonster.GetSecondsBetweenActions();
 		actionBarImage.fillAmount = 0;
 		colorTimer = 0;
+	}
+
+	public void SetActionEnabled (bool trueOrFalse) {
+		actionEnabled = trueOrFalse;
 	}
 }

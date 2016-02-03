@@ -9,8 +9,10 @@ public class PlayerInteractableController : MonoBehaviour {
 	private Button interactButton;
 	private GameObject textBox;
 	private InteractionTextController textController;
+	private Animator transitionPanelAnimator;
 
 	private GameObject triggerHit;
+	private Vector3 doorwayDestinationVector3;
 
 	// Use this for initialization
 	void Start () {
@@ -21,6 +23,7 @@ public class PlayerInteractableController : MonoBehaviour {
 		textBox = GameObject.Find("Text Box");
 		textBox.SetActive(false);
 		textController = GameObject.FindObjectOfType<InteractionTextController>();
+		transitionPanelAnimator = GameObject.Find("Transition Panel").GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -43,12 +46,19 @@ public class PlayerInteractableController : MonoBehaviour {
 		}
 
 		if (triggerHit.tag == "Doorway") {
-			gameObject.transform.position = collider.GetComponent<Doorway>().GetDestinationVector();
+			// trigger animation
+			gameObject.GetComponent<PlayerMovement>().SetMovementIsEnabled(false);
+			transitionPanelAnimator.SetTrigger("DoorwayTransitionTrigger");
+			// TODO animation then triggers this portion
+			doorwayDestinationVector3 = collider.GetComponent<Doorway>().GetDestinationVector();
 		}
 	}
 
+	public void TeleportPlayer () {
+		transform.position = doorwayDestinationVector3;
+	}
+
 	void OnTriggerExit2D (Collider2D collider) {
-		Debug.Log("Exiting Trigger");
 		if (collider.gameObject.tag == "Interactable") {
 			interactButton.interactable = false;
 		}

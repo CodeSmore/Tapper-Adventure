@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\EnemyMonster.cs" />
      <Compile Include="Assets\Scripts\FadeTextureController.cs" />
      <Compile Include="Assets\Scripts\GameController.cs" />
+     <Compile Include="Assets\Scripts\InGameButton.cs" />
      <Compile Include="Assets\Scripts\InteractionTextController.cs" />
      <Compile Include="Assets\Scripts\LevelManager.cs" />
      <Compile Include="Assets\Scripts\ModeTransitionController.cs" />
@@ -70,8 +71,11 @@
      <Compile Include="Assets\Scripts\PlayerInteractableController.cs" />
      <Compile Include="Assets\Scripts\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\PlayerPrefsManager.cs" />
+     <Compile Include="Assets\Scripts\ReactionaryPuzzleObject.cs" />
+     <Compile Include="Assets\Scripts\SkillsMenuPopulator.cs" />
      <Compile Include="Assets\Scripts\SoundController.cs" />
      <Compile Include="Assets\Scripts\SplashManager.cs" />
+     <Compile Include="Assets\Scripts\StatusMenuPopulator.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

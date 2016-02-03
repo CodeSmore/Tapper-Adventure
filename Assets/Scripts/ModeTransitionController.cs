@@ -3,27 +3,46 @@ using System.Collections;
 
 public class ModeTransitionController : MonoBehaviour { // Controls the transition between world, battle, and menu
 
-	GameObject menu;
+	private GameObject world;
+	private GameObject battle;
+	private EnemyActionBar actionBar;
+	private BattleResultsController battleResultsController;
+	PlayerInteractableController playerInteractionController;
+	private PlayerMovement playerMovement;
+
+	private Vector3 destinationLocation;
 
 	// Use this for initialization
 	void Awake () {
-		menu = GameObject.Find("Pause Menu");
+		world = GameObject.Find("World");
+		battle = GameObject.Find("Battle");
+		actionBar = GameObject.FindObjectOfType<EnemyActionBar>();
+		battleResultsController = GameObject.FindObjectOfType<BattleResultsController>();
+		playerInteractionController = GameObject.FindObjectOfType<PlayerInteractableController>();
+		playerMovement = GameObject.FindObjectOfType<PlayerMovement>();
 	}
 
-	void Start () {
-		menu.SetActive(false);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	public void TransitionMode () {
+		world.SetActive (!world.activeSelf);
+		battle.SetActive (!battle.activeSelf);
 	}
 
-	public void TransitionPauseMenu () {
-		if (menu.activeSelf == true) {
-			menu.SetActive(false);
-		} else if (menu.activeSelf == false) {
-			menu.SetActive(true);
+	public void EndBattlePreparations () {
+		battleResultsController.EndOfBattlePreparations();
+	}
+
+	public void ActivateActionBar () {
+		actionBar.SetActionEnabled (true);
+	}
+
+	public void TeleportPlayer () {
+		playerInteractionController.TeleportPlayer();
+	}
+
+	public void EnableMovement () {
+		if (world.activeSelf) {
+			playerMovement.SetMovementIsEnabled(true);
+			Debug.Log("Movement Enabled");
 		}
 	}
 }

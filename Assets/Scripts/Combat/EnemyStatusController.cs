@@ -27,19 +27,21 @@ public class EnemyStatusController : MonoBehaviour {
 		// reinitialize enemyMonster variable each time, b/c after each battle, the previous one is destroyed.
 		if (!enemyMonster) {
 			enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
+		} else {
 			statusRectTransform.anchoredPosition = new Vector2 (transform.position.x , enemyMonster.GetHealthBarYPos());
-		}
+			UpdateStatusEffect();
 
-		UpdateStatusEffect();
+			if (enableStatusTimer) {
+				remainingStatusTime -= Time.deltaTime;
 
-		if (enableStatusTimer) {
-			remainingStatusTime -= Time.deltaTime;
-
-			if (remainingStatusTime <= 0) {
-				enemyMonster.SetCurrentStatus(StatusEffect.None);
-				enableStatusTimer = false;
+				if (remainingStatusTime <= 0) {
+					enemyMonster.SetCurrentStatus(StatusEffect.None);
+					enableStatusTimer = false;
+				}
 			}
 		}
+
+
 	}
 
 	void UpdateStatusEffect () {
