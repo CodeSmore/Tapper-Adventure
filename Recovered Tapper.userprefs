@@ -1,11 +1,17 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerClass.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\InteractionTextController.cs">
     <Files>
-      <File FileName="Assets\Scripts\StatusMenuPopulator.cs" Line="31" Column="56" />
-      <File FileName="Assets\Scripts\SkillsMenuPopulator.cs" Line="68" Column="4" />
-      <File FileName="Assets\Scripts\PlayerClass.cs" Line="103" Column="37" />
-      <File FileName="Assets\Scripts\PauseMenuController.cs" Line="37" Column="48" />
+      <File FileName="Assets\Scripts\ReactionaryPuzzleObject.cs" Line="53" Column="22" />
+      <File FileName="Assets\Scripts\StatusMenuPopulator.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\SkillsMenuPopulator.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerClass.cs" Line="103" Column="17" />
+      <File FileName="Assets\Scripts\PauseMenuController.cs" Line="37" Column="23" />
+      <File FileName="Assets\Scripts\InGameButton.cs" Line="19" Column="51" />
+      <File FileName="Assets\Scripts\GameController.cs" Line="56" Column="28" />
+      <File FileName="Assets\Scripts\Combat\EnemySpawnerController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\PlayerInteractableController.cs" Line="39" Column="52" />
+      <File FileName="Assets\Scripts\InteractionTextController.cs" Line="49" Column="35" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

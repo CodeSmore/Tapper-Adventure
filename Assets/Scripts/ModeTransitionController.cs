@@ -42,7 +42,7 @@ public class ModeTransitionController : MonoBehaviour { // Controls the transiti
 	public void EnableMovement () {
 		if (world.activeSelf) {
 			playerMovement.SetMovementIsEnabled(true);
-			Debug.Log("Movement Enabled");
+			playerMovement.ResetDistanceTraveled();
 		}
 	}
 }

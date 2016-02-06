@@ -12,6 +12,7 @@ public class SkillsMenuPopulator : MonoBehaviour {
 	private GameObject skillTwoStats;
 	private GameObject skillThreeStats;
 
+
 	[Header("Skill 1", order = 0)]
 	[Header("--------", order = 1)]
 	public Image image1;
@@ -45,42 +46,73 @@ public class SkillsMenuPopulator : MonoBehaviour {
 
 
 	void OnEnable () {
-		// do stuff!
-		if (!playerClass) {
-			playerClass = GameObject.FindObjectOfType<PlayerClass>();
-			skill1 = playerClass.skill1;
+
+		if (Time.realtimeSinceStartup > 2) {
+			if (!playerClass) {
+				playerClass = GameObject.FindObjectOfType<PlayerClass>();
+			}
+
+			if (skill1 == null) {
+				skill1 = playerClass.GetSkill1();
+				skill2 = playerClass.GetSkill2();
+				skill3 = playerClass.GetSkill3();
+			}
+			if (!skillOneStats) {
+				skillOneStats = GameObject.Find("Skill 1 Stats");
+			}
+			if (!skillTwoStats) {
+				skillTwoStats = GameObject.Find("Skill 2 Stats");
+			}
+			if (!skillThreeStats) {
+				skillThreeStats = GameObject.Find("Skill 3 Stats");
+			}
+
+		
+
+			if (playerClass.SkillOneUnlocked()) {
+				skillOneStats.SetActive(true);
+
+				image1.sprite = skill1.GetSprite();
+				nameText1.text = skill1.GetName();
+				damageText1.text = skill1.GetBaseDamage().ToString();
+				costText1.text = skill1.GetEnergyCost().ToString();
+				cooldownText1.text = skill1.GetCooldown().ToString();
+				statusEffectText1.text = skill1.GetStatusEffect().ToString();
+				chanceText1.text = (skill1.GetChanceOfEffect() * 100).ToString() + "%";
+			} else {
+				skillOneStats.SetActive(false);
+			}
+
+
+			if (playerClass.SkillTwoUnlocked()) {
+				skillTwoStats.SetActive(true);
+
+				image2.sprite = skill2.GetSprite();
+				nameText2.text = skill2.GetName();
+				damageText2.text = skill2.GetBaseDamage().ToString();
+				costText2.text = skill2.GetEnergyCost().ToString();
+				cooldownText2.text = skill2.GetCooldown().ToString();
+				statusEffectText2.text = skill2.GetStatusEffect().ToString();
+				chanceText2.text = (skill2.GetChanceOfEffect() * 100).ToString() + "%";
+			} else {
+				skillTwoStats.SetActive(false);
+			}
+
+
+			if (playerClass.SkillThreeUnlocked()) {
+				skillThreeStats.SetActive(true);
+
+				image3.sprite = skill3.GetSprite();
+				nameText3.text = skill3.GetName();
+				damageText3.text = skill3.GetBaseDamage().ToString();
+				costText3.text = skill3.GetEnergyCost().ToString();
+				cooldownText3.text = skill3.GetCooldown().ToString();
+				statusEffectText3.text = skill3.GetStatusEffect().ToString();
+				chanceText3.text = (skill3.GetChanceOfEffect() * 100).ToString() + "%";
+			} else {
+				skillThreeStats.SetActive(false);
+			}
 		}
-		if (!skillOneStats) {
-			skillOneStats = GameObject.Find("Skill 1 Stats");
-		}
-		if (!skillTwoStats) {
-			skillTwoStats = GameObject.Find("Skill 2 Stats");
-		}
-		if (!skillThreeStats) {
-			skillThreeStats = GameObject.Find("Skill 3 Stats");
-		}
-
-
-
-		if (playerClass.SkillOneUnlocked()) {
-			skillOneStats.SetActive(true);
-
-
-		} else {
-			skillOneStats.SetActive(false);
-		}
-
-		if (playerClass.SkillTwoUnlocked()) {
-			skillTwoStats.SetActive(true);
-		} else {
-			skillTwoStats.SetActive(false);
-		}
-
-		if (playerClass.SkillThreeUnlocked()) {
-			skillThreeStats.SetActive(true);
-		} else {
-			skillThreeStats.SetActive(false);
-		}
-
 	}
+	
 }

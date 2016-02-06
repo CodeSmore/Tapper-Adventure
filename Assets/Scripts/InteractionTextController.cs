@@ -39,6 +39,16 @@ public class InteractionTextController : MonoBehaviour {
 			textBoxText.text = "Dead ends: Double the time, half the fun! :D";
 		} else if (interactableName == "Cave Sign (5)") {
 			textBoxText.text = "Buttons, how fun! \nTo activate, just step on them.\n\nBy the way, did find the other one?";
+		} else if (interactableName == "Cave Sign (6)") {
+			textBoxText.text = "Hmm, the path is blocked by three locks...\nOh well! Guess you'll just have to find the yellow switch for each one!!!\n\nYou can find at least one through each of the two portals.\n\nGood Luck!";
+		} else if (interactableName == "Cave Sign (7)") {
+			textBoxText.text = "Oh! Oh! The path is blocked by a combination lock! How exciiiiiiiting!\nSo...push the buttons in the correct order. If you mess up, an evil spirit might attack you...\nEither way, you'll have to start aaaaaaall over.\n\nGood Luck!";
+		} else if (interactableName == "Cave Sign (8)") {
+			textBoxText.text = "Hmm, this one is tricky. It requires a certain...finesse. \nTouch the white walls and you'll have to start all over. :P\n\nGood Luck!";
+		} else if (interactableName == "Cave Sign (9)") {
+			textBoxText.text = "Wtf is this!? It's not even a puzzle!! Oh well, just go hit that button.\nI dare ya!";
+		} else if (interactableName == "Cave Sign (10)") {
+			textBoxText.text = "Ooooooooooooooooooooooooooooooooooooooo\nSo many buttons!! :3\nHit the Buttons! Hit ALL the buttons!!\n\n...seriously, this took awhile...";
 		} 
 	}
 }

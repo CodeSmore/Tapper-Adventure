@@ -41,4 +41,8 @@ public class EnemySpawnerController : MonoBehaviour {
 	public void SetSpawnType (string newSpawnType) {
 		spawnType = newSpawnType;
 	}
+
+	public string GetSpawnType () {
+		return spawnType;
+	}
 }

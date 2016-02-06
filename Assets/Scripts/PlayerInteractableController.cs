@@ -13,6 +13,7 @@ public class PlayerInteractableController : MonoBehaviour {
 
 	private GameObject triggerHit;
 	private Vector3 doorwayDestinationVector3;
+	private bool timeToAnnoy = false;
 
 	// Use this for initialization
 	void Start () {
@@ -25,11 +26,6 @@ public class PlayerInteractableController : MonoBehaviour {
 		textController = GameObject.FindObjectOfType<InteractionTextController>();
 		transitionPanelAnimator = GameObject.Find("Transition Panel").GetComponent<Animator>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
 	void OnTriggerEnter2D (Collider2D collider) {
 		triggerHit = collider.gameObject;
@@ -40,8 +36,8 @@ public class PlayerInteractableController : MonoBehaviour {
 			enemySpawnerController.SetSpawnType(triggerHit.name);
 		}
 
-		if (triggerHit.name == "Bridge Boss Encounter") {
-			gameController.TransitionToBattle();
+		if (triggerHit.name == "Bridge Boss Encounter" || triggerHit.name == "Cave Boss Encounter") {
+			gameController.BeginBattle();
 			collider.gameObject.SetActive(false);
 		}
 
@@ -51,7 +47,17 @@ public class PlayerInteractableController : MonoBehaviour {
 			transitionPanelAnimator.SetTrigger("DoorwayTransitionTrigger");
 			// TODO animation then triggers this portion
 			doorwayDestinationVector3 = collider.GetComponent<Doorway>().GetDestinationVector();
+
+			// if entering Tabuz Maze, increase spawn rate
+			// This info is grabbed by GameController.cs
+			if (triggerHit.name == "Bad Portal") {
+				timeToAnnoy = true;
+			} else {
+				timeToAnnoy = false;
+			}
 		}
+
+
 	}
 
 	public void TeleportPlayer () {
@@ -71,5 +77,9 @@ public class PlayerInteractableController : MonoBehaviour {
 
 	public void DeactivateTextBox () {
 		textBox.SetActive(false);
+	}
+
+	public bool IsTimeToAnnoy () {
+		return timeToAnnoy;
 	}
 }

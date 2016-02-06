@@ -13,4 +13,9 @@ public class InGameButton : MonoBehaviour {
 	public bool ButtonIsPressed () {
 		return isPressed;
 	}
+
+	public void ResetButton () {
+		isPressed = false;
+		GetComponent<SpriteRenderer>().color = Color.red;
+	}
 }

@@ -5,26 +5,74 @@ public class ReactionaryPuzzleObject : MonoBehaviour {
 
 	public InGameButton[] inGameButtons;
 	public GameObject replacement;
+	public GameObject playerResetPosition;
+	private GameController gameController;
+	public GameObject trigger;
 
 	private bool stillPuzzling = true;
-	
+	private float gagTimer = 0;
+	private int buttonArraySize;
+
+	void Start () {
+		buttonArraySize = inGameButtons.Length;
+		gameController = GameObject.FindObjectOfType<GameController>();
+	}
+
 	// Update is called once per frame
 	void Update () {
-		if (stillPuzzling) {
-			stillPuzzling = false;
-			foreach (InGameButton button in inGameButtons) {
-				if (!button.ButtonIsPressed()) {
-					stillPuzzling = true;
+		if (trigger == null) {
+			if (stillPuzzling) {
+				stillPuzzling = false;
+				foreach (InGameButton button in inGameButtons) {
+					if (!button.ButtonIsPressed()) {
+						stillPuzzling = true;
+					}
+				}
+
+				// Combination lock must be executed in order
+				if (gameObject.tag == "Combination Lock") {
+					for (int x = buttonArraySize - 1; x >= 1; x--) {
+						if (inGameButtons[x].ButtonIsPressed() && !inGameButtons[x-1].ButtonIsPressed()) {
+							// reset buttons, spawn monster, move player 
+
+							GameObject.Find("Player").transform.position = playerResetPosition.transform.position;
+							foreach (InGameButton button in inGameButtons) {
+								button.ResetButton();
+							}
+
+							gameController.BeginBattle();
+						}
+					}
 				}
 			}
-
-			if (!stillPuzzling) {
+			if (!stillPuzzling && gameObject.tag != "Gag Puzzle") {
 				CompletePuzzle();
 			}
-		} 
+		} else {
+			if (trigger.activeSelf == false) {
+				CompletePuzzle();
+			}
+		}
+
+		// gag puzzle locks a barrier after button is pressed, then unlocks it ten seconds later. Hilarity ensues!
+		if (!stillPuzzling && gameObject.tag == "Gag Puzzle") {
+			gagTimer += Time.deltaTime;
+
+			if (gagTimer < 10) {
+				GetComponent<SpriteRenderer>().enabled = true;
+				GetComponent<BoxCollider2D>().enabled = true;
+			} else {
+				Destroy(gameObject);
+			}
+		}
+
+
 	}
 
 	void CompletePuzzle () {
+		// delete the object (obstacle or place holder)
+		Destroy(gameObject);
+
 		if (this.tag == "Disabled Portal") {
 			ActivatePortal();
 		}
@@ -32,7 +80,5 @@ public class ReactionaryPuzzleObject : MonoBehaviour {
 
 	void ActivatePortal () {
 		replacement.SetActive(true);
-		Destroy(gameObject);
-		Debug.Log("Portal Activated");
 	}
 }

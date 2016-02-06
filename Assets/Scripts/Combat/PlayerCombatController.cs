@@ -58,6 +58,47 @@ public class PlayerCombatController : MonoBehaviour {
 		} 
 	}
 
-	public void UseSkill2 () {}
-	public void UseSkill3 () {}
+	public void UseSkill2 () {
+		Skill skill = playerClass.GetSkill2();
+		float skillCost = skill.GetEnergyCost();
+
+		if (playerClass.GetCurrentEnergy() >= skillCost) {
+			
+			playerClass.UseEnergy(skillCost);
+
+			float damage = skill.GetBaseDamage() * playerClass.GetAttackStat();
+
+			if (Random.value < skill.GetChanceOfEffect()) {
+				enemyMonster.SetCurrentStatus(skill.GetStatusEffect());
+				enemyStatusController.StartStatusEffectTimer();
+			}
+
+			enemyMonster.TakeDamage(damage);
+
+			// Cooldown
+			GameObject.Find("Skill 2 Button").GetComponent<SkillButtonController>().StartCooldown(skill.GetCooldown());
+		} 
+	}
+
+	public void UseSkill3 () {
+		Skill skill = playerClass.GetSkill3();
+		float skillCost = skill.GetEnergyCost();
+
+		if (playerClass.GetCurrentEnergy() >= skillCost) {
+			
+			playerClass.UseEnergy(skillCost);
+
+			float damage = skill.GetBaseDamage() * playerClass.GetAttackStat();
+
+			if (Random.value < skill.GetChanceOfEffect()) {
+				enemyMonster.SetCurrentStatus(skill.GetStatusEffect());
+				enemyStatusController.StartStatusEffectTimer();
+			}
+
+			enemyMonster.TakeDamage(damage);
+
+			// Cooldown
+			GameObject.Find("Skill 3 Button").GetComponent<SkillButtonController>().StartCooldown(skill.GetCooldown());
+		} 
+	}
 }

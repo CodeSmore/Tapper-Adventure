@@ -94,15 +94,23 @@ public class PlayerClass : MonoBehaviour {
 	[Tooltip("Duration of above status effect in seconds")]
 	public float statusEffectDurationInSeconds3;
 
-	public Skill skill1;
+	private Skill skill1;
+	private Skill skill2;
+	private Skill skill3;
 
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 // TODO instantiate all stats based on level-up formula
 		skill1 = new Skill (skillSprite1, skillName1, levelOfSkill1, baseDamage1, energyCost1, cooldownTime1, statusEffectOfSkill1, chanceOfStatusEffect1, statusEffectDurationInSeconds1);
+		skill2 = new Skill (skillSprite2, skillName2, levelOfSkill2, baseDamage2, energyCost2, cooldownTime2, statusEffectOfSkill2, chanceOfStatusEffect2, statusEffectDurationInSeconds2);
+		skill3 = new Skill (skillSprite3, skillName3, levelOfSkill3, baseDamage3, energyCost3, cooldownTime3, statusEffectOfSkill3, chanceOfStatusEffect3, statusEffectDurationInSeconds3);
 		currentHealth = maxHealth;
 		currentStatus = StatusEffect.None;
+	}
+
+	void Start () {
+		ManageEarnedSkills();
 	}
 	
 	// Update is called once per frame
@@ -112,6 +120,14 @@ public class PlayerClass : MonoBehaviour {
 
 	public Skill GetSkill1 () {
 		return skill1;
+	}
+
+	public Skill GetSkill2 () {
+		return skill2;
+	}
+
+	public Skill GetSkill3 () {
+		return skill3;
 	}
 
 	public int GetPlayerLevel () {
@@ -132,22 +148,60 @@ public class PlayerClass : MonoBehaviour {
 		Heal (maxHealth);
 		currentStatus = StatusEffect.None;
 
-		// TODO move skill activiation to boss events
-		// TODO CREATE boss events script to handle them
-		if (playerLevel == 3) {
-			// activate skill
-			GameObject.Find("Skill 3").GetComponentInChildren<SkillButtonController>().ActivateButton();
-			GameObject.Find("Skill 3").GetComponentInChildren<SkillButtonController>().Unlock();
-			skillUnlocked3 = true;
-		} else if (playerLevel == 2) {
-			// activate skill
-			GameObject.Find("Skill 2").GetComponentInChildren<SkillButtonController>().ActivateButton();
-			GameObject.Find("Skill 2").GetComponentInChildren<SkillButtonController>().Unlock();
-			skillUnlocked2 = true;
-		} 
+		ManageEarnedSkills();
+
 
 		if (currentExperiencePoints >= GetExperiencePointsForNextLevel()) {
 			LevelUp();
+		}
+	}
+
+	public void ManageEarnedSkills () {
+		// TODO move skill activiation to boss events
+		// TODO CREATE boss events script to handle them
+		if (playerLevel >= 3) {
+			// activate skill
+			// enable button and cooldown background and disable dashed circle
+			foreach (Transform thing in GameObject.Find("Skill 3").transform) {
+				if (thing.gameObject.name == "Dashed Circle") {
+					thing.gameObject.SetActive(false);
+				} else {
+					thing.gameObject.SetActive(true);
+				}
+			}
+			GameObject.Find("Skill 3").GetComponentInChildren<SkillButtonController>().ActivateButton();
+			GameObject.Find("Skill 3").GetComponentInChildren<SkillButtonController>().Unlock();
+			skillUnlocked3 = true;
+		} else {
+			foreach (Transform thing in GameObject.Find("Skill 3").transform) {
+				if (thing.gameObject.name == "Dashed Circle") {
+					thing.gameObject.SetActive(true);
+				} else {
+					thing.gameObject.SetActive(false);
+				}
+			}
+		}
+
+		if (playerLevel >= 2) {
+			// activate skill
+			foreach (Transform thing in GameObject.Find("Skill 2").transform) {
+				if (thing.gameObject.name == "Dashed Circle") {
+					thing.gameObject.SetActive(false);
+				} else {
+					thing.gameObject.SetActive(true);
+				}
+			}
+			GameObject.Find("Skill 2").GetComponentInChildren<SkillButtonController>().ActivateButton();
+			GameObject.Find("Skill 2").GetComponentInChildren<SkillButtonController>().Unlock();
+			skillUnlocked2 = true;
+		} else {
+			foreach (Transform thing in GameObject.Find("Skill 2").transform) {
+				if (thing.gameObject.name == "Dashed Circle") {
+					thing.gameObject.SetActive(true);
+				} else {
+					thing.gameObject.SetActive(false);
+				}
+			}
 		}
 	}
 

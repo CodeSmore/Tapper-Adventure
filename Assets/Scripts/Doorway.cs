@@ -8,4 +8,8 @@ public class Doorway : MonoBehaviour {
 	public Vector3 GetDestinationVector () {
 		return destination.transform.position;
 	}
+
+	public string GetDestinationName () {
+		return destination.name;
+	}
 }

@@ -13,7 +13,7 @@ public class BattleResultsController : MonoBehaviour {
 	private GameController gameController;
 	private GameObject pauseButton;
 	private EnemyActionBar enemyActionBar;
-	private SkillButtonController[] skillButtonController;
+	private SkillButtonController[] skillButtonControllers;
 
 	// Level Up Battle Results
 	public GameObject levelUpHeader;
@@ -34,7 +34,7 @@ public class BattleResultsController : MonoBehaviour {
 	void Awake () {
 		enemyActionBar = GameObject.FindObjectOfType<EnemyActionBar>();
 		playerClass = GameObject.FindObjectOfType<PlayerClass>();
-		skillButtonController = GameObject.FindObjectsOfType<SkillButtonController>();
+		skillButtonControllers = GameObject.FindObjectsOfType<SkillButtonController>();
 		enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
 		levelUpHeader.SetActive(false);
 	}
@@ -85,7 +85,7 @@ public class BattleResultsController : MonoBehaviour {
 	}
 
 	void OnDisable () {
-		foreach (SkillButtonController controller in skillButtonController) {
+		foreach (SkillButtonController controller in skillButtonControllers) {
 			if (controller.Unlocked()) {
 				controller.SetCooldownActive(true);
 			}	
@@ -95,7 +95,7 @@ public class BattleResultsController : MonoBehaviour {
 	}
 
 	void OnEnable () {
-		foreach (SkillButtonController controller in skillButtonController) {
+		foreach (SkillButtonController controller in skillButtonControllers) {
 			if (controller.Unlocked()) {
 				controller.SetCooldownActive(false);
 			}	
@@ -117,7 +117,8 @@ public class BattleResultsController : MonoBehaviour {
 
 			playerClass.LevelUp();
 
-			foreach (SkillButtonController controller in skillButtonController) {
+			// ends the cooldown phase of each earned skill button upon LevelUp
+			foreach (SkillButtonController controller in skillButtonControllers) {
 				if (controller.Unlocked()) {
 					controller.ActivateButton();
 					controller.EndCooldown();

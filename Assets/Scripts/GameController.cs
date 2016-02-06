@@ -11,10 +11,14 @@ public class GameController : MonoBehaviour {
 	private PlayerMovement playerMovement;
 	private EnemySpawnerController enemySpawnerController;
 	private GameObject transitionPanel;
-	private EnemyActionBar actionBar;
+	private BossStatusController bossStatusController;
+	private PlayerInteractableController playerInteractableController;
 
-	public float distanceTilSpawnThreshold;
+	public float standardDistanceTilSpawnThreshold, oppressedDistanceTilSpawnThreshold, annoyingDistanceTilSpawnThreshold;
+	private float distanceTilSpawnThreshold;
 	private float probabilityOfMonsterAttackPerFrame = 0.01f;
+	private float randomGeneratorTimer = 0;
+	private float randomSpawnNumber = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -24,16 +28,34 @@ public class GameController : MonoBehaviour {
 		playerClass = GameObject.FindObjectOfType<PlayerClass>();
 		enemySpawnerController = GameObject.FindObjectOfType<EnemySpawnerController>();
 		transitionPanel = GameObject.Find("Transition Panel");
-		actionBar = GameObject.FindObjectOfType<EnemyActionBar>();
 		battle.SetActive(false);
+		bossStatusController = GameObject.FindObjectOfType<BossStatusController>();
+		playerInteractableController = GameObject.FindObjectOfType<PlayerInteractableController>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (playerMovement.GetDistanceTraveled() >= distanceTilSpawnThreshold && Random.value < probabilityOfMonsterAttackPerFrame && playerMovement.PlayerIsMoving()) {
-			playerMovement.ResetDistanceTraveled();
-			TransitionToBattle();
+		if (playerInteractableController.IsTimeToAnnoy()) {
+			distanceTilSpawnThreshold = annoyingDistanceTilSpawnThreshold;
+		} else if (bossStatusController.IsOppressiveForceActive()) {
+			distanceTilSpawnThreshold = oppressedDistanceTilSpawnThreshold;
+		} else {
+			distanceTilSpawnThreshold = standardDistanceTilSpawnThreshold;
 		}
+
+		randomGeneratorTimer += Time.deltaTime;
+		if (randomGeneratorTimer > 1) {
+			randomSpawnNumber = Random.value;
+		}
+
+		if (playerMovement.GetDistanceTraveled() >= distanceTilSpawnThreshold && randomSpawnNumber < probabilityOfMonsterAttackPerFrame && playerMovement.PlayerIsMoving()) {
+			BeginBattle();
+		}
+	}
+
+	public void BeginBattle () {
+		playerMovement.ResetDistanceTraveled();
+		TransitionToBattle();
 	}
 
 	public void TransitionToWorld () {

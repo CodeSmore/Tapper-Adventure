@@ -7,30 +7,55 @@ public class SkillButtonController : MonoBehaviour {
 	bool cooldownActive = false;
 	float cooldownTimer = 0;
 	float startCooldownTime;
+	float skillCost;
 	public bool unlocked = false;
 
 	Button skillButtonComponent;
 	Text cooldownTimerText;
 	Image cooldownBackgroundImage;
 	Image skillButtonDesign;
+	PlayerClass playerClass;
+
 
 	void Awake () {
 		cooldownTimerText = GetComponentInChildren<Text>();
+		playerClass = GameObject.FindObjectOfType<PlayerClass>();
+
+		// in awake b/c these componenets are disabled immediately afterwards
+		// causing NullReferenceExceptions
+		cooldownBackgroundImage = transform.parent.FindChild("Cooldown Background").GetComponent<Image>();
+		skillButtonDesign = gameObject.transform.FindChild("Design").GetComponent<Image>();
+		skillButtonComponent = GetComponent<Button>();
 	}
 	// Use this for initialization
 	void Start () {
-		skillButtonComponent = GetComponent<Button>();
 		if (skillButtonComponent.interactable) {
 			unlocked = true;
 		}
 
-		cooldownBackgroundImage = transform.parent.FindChild("Cooldown Background").GetComponent<Image>();
-		skillButtonDesign = gameObject.transform.FindChild("Design").GetComponent<Image>();
+		if (gameObject.name == "Skill 1 Button") {
+			skillButtonDesign.sprite = playerClass.GetSkill1().GetSprite();
+			skillCost = playerClass.GetSkill1().GetEnergyCost();
+		} else if (gameObject.name == "Skill 2 Button") {
+			skillButtonDesign.sprite = playerClass.GetSkill2().GetSprite();
+			skillCost = playerClass.GetSkill2().GetEnergyCost();
+		} else if (gameObject.name == "Skill 3 Button") {
+			skillButtonDesign.sprite = playerClass.GetSkill3().GetSprite();
+			skillCost = playerClass.GetSkill3().GetEnergyCost();
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (playerClass.currentEnergy < skillCost) {
+			// disable interactive
+			skillButtonComponent.interactable = false;
+		} else if (!cooldownActive) {
+			skillButtonComponent.interactable = true;
+		}
+
 		if (cooldownActive) {
+			
 			cooldownTimerText.text = Mathf.CeilToInt(startCooldownTime - cooldownTimer).ToString();
 			cooldownTimer += Time.deltaTime;
 
@@ -42,7 +67,7 @@ public class SkillButtonController : MonoBehaviour {
 				cooldownTimerText.text = null;
 				cooldownTimer = 0;
 			}
-		}
+		} 
 	}
 
 	public void StartCooldown (float cooldownTime) {

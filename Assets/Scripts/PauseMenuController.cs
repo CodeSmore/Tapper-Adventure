@@ -16,11 +16,6 @@ public class PauseMenuController : MonoBehaviour {
 		skillsMenu = GameObject.Find("Skills Menu");
 		skillsMenu.SetActive(false);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
 	public void TogglePauseMenu () {
 		pauseMenu.SetActive(!pauseMenu.activeSelf);

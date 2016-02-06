@@ -4,7 +4,7 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
 
-	public float movementSpeed, padding;
+	public float standardMovementSpeed, oppressiveMovementSpeed;
 	private float distanceTraveled;
 	private Vector3 lastKnownPosition;
 	private bool playerIsMoving;
@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour {
 	private Camera worldCamera;
 	private EventSystem eventSystem;
 	private PlayerInteractableController playerInteratableController;
+	private BossStatusController bossStatusController;
 
 	public static bool worldMode = true;
 
@@ -21,6 +22,7 @@ public class PlayerMovement : MonoBehaviour {
 		worldCamera = GetComponentInChildren<Camera>();
 		eventSystem = GameObject.FindObjectOfType<EventSystem>();
 		playerInteratableController = GameObject.FindObjectOfType<PlayerInteractableController>();
+		bossStatusController = GameObject.FindObjectOfType<BossStatusController>();
 
 		lastKnownPosition = transform.position;
 	}
@@ -40,6 +42,13 @@ public class PlayerMovement : MonoBehaviour {
 	private void MoveWithFinger () {
 		if (movementIsEnabled) {
 			Vector2 mousePos = worldCamera.ScreenToWorldPoint (Input.mousePosition);	
+			float movementSpeed;
+
+			if (bossStatusController.IsOppressiveForceActive()) {
+				movementSpeed = oppressiveMovementSpeed;
+			} else {
+				movementSpeed = standardMovementSpeed;
+			}
 
 			// Standard Lerp for smooth movement
 			Vector3 playerPos = Vector3.Lerp (
@@ -70,6 +79,7 @@ public class PlayerMovement : MonoBehaviour {
 
 	public void ResetDistanceTraveled () {
 		distanceTraveled = 0;
+		lastKnownPosition = transform.position;
 	}
 
 	public float GetDistanceTraveled () {
