@@ -12,6 +12,7 @@ public class PlayerInteractableController : MonoBehaviour {
 	private Animator transitionPanelAnimator;
 
 	private GameObject triggerHit;
+	private GameObject interactTrigger;
 	private Vector3 doorwayDestinationVector3;
 	private bool timeToAnnoy = false;
 
@@ -30,13 +31,14 @@ public class PlayerInteractableController : MonoBehaviour {
 	void OnTriggerEnter2D (Collider2D collider) {
 		triggerHit = collider.gameObject;
 
-		if (triggerHit.tag == "Interactable") {
-			interactButton.interactable = true;
-		} else if (triggerHit.tag == "SpawnArea") {
+		// If player collides with SpawnArea collider, the SpawnType in enemySpawnerController is set
+		// This is in OnTriggerEnter b/c it only needs updated when venue is changed
+		if (triggerHit.tag == "SpawnArea") {
 			enemySpawnerController.SetSpawnType(triggerHit.name);
 		}
 
-		if (triggerHit.name == "Bridge Boss Encounter" || triggerHit.name == "Cave Boss Encounter") {
+		if (triggerHit.tag == "BattleTrigger") {
+			enemySpawnerController.SetSpawnType(triggerHit.name);
 			gameController.BeginBattle();
 			collider.gameObject.SetActive(false);
 		}
@@ -56,8 +58,14 @@ public class PlayerInteractableController : MonoBehaviour {
 				timeToAnnoy = false;
 			}
 		}
+	}
 
+	void OnTriggerStay2D (Collider2D collider) {
+		interactTrigger = collider.gameObject;
 
+		if (interactTrigger.tag == "Interactable" || interactTrigger.tag == "Destructable") {
+			interactButton.interactable = true;
+		} 
 	}
 
 	public void TeleportPlayer () {
@@ -65,14 +73,20 @@ public class PlayerInteractableController : MonoBehaviour {
 	}
 
 	void OnTriggerExit2D (Collider2D collider) {
-		if (collider.gameObject.tag == "Interactable") {
+		if (collider.gameObject.tag == "Interactable" || collider.gameObject.tag == "Destructable") {
 			interactButton.interactable = false;
 		}
 	}
 
 	public void Interact () {
-		textBox.SetActive(true);
-		textController.UpdateText(triggerHit.name);
+		if (interactTrigger.GetComponent<SpriteRenderer>().sprite.name == "Sign2") {
+			textBox.SetActive(true);
+			textController.UpdateText(interactTrigger.name);
+		} else if (interactTrigger.tag == "Destructable") {
+			Destroy(interactTrigger);
+			interactButton.interactable = false;
+		}
+
 	}
 
 	public void DeactivateTextBox () {
