@@ -32,7 +32,6 @@ public class PlayerClass : MonoBehaviour {
 	[Header("-------", order = 1)]
 
 	[Header("Skill 1", order = 2)]
-	public bool skillUnlocked1;
 	public Sprite skillSprite1;
 	[Tooltip("Name of skill as a string")]
 	public string skillName1;
@@ -53,7 +52,6 @@ public class PlayerClass : MonoBehaviour {
 	[Header("-------", order = 2)]
 
 	[Header("Skill 2", order = 3)]
-	public bool skillUnlocked2;
 	public Sprite skillSprite2;
 	[Tooltip("Name of skill as a string")]
 	public string skillName2;
@@ -75,7 +73,6 @@ public class PlayerClass : MonoBehaviour {
 
 
 	[Header("Skill 3", order = 4)]
-	public bool skillUnlocked3;
 	public Sprite skillSprite3;
 	[Tooltip("Name of skill as a string")]
 	public string skillName3;
@@ -98,24 +95,40 @@ public class PlayerClass : MonoBehaviour {
 	private Skill skill2;
 	private Skill skill3;
 
+	private bool skillUnlocked1;
+	private bool skillUnlocked2;
+	private bool skillUnlocked3;
+
+	// skill button objects
+	private GameObject skill1ButtonObject;
+	private GameObject skill2ButtonObject;
+	private GameObject skill3ButtonObject;
+
+	// holds current cooldown timer values for skills
+	private float cooldownTimerSkill1;
+	private float cooldownTimerSkill2;
+	private float cooldownTimerSkill3;
+
+
+	private BossStatusController bossStatusController;
+
+	void Update () {
+		Debug.Log("Skill 1 cooldown: " + GetCooldownTimerSkill1());
+	}
 
 	// Use this for initialization
 	void Awake () {
-// TODO instantiate all stats based on level-up formula
 		skill1 = new Skill (skillSprite1, skillName1, levelOfSkill1, baseDamage1, energyCost1, cooldownTime1, statusEffectOfSkill1, chanceOfStatusEffect1, statusEffectDurationInSeconds1);
 		skill2 = new Skill (skillSprite2, skillName2, levelOfSkill2, baseDamage2, energyCost2, cooldownTime2, statusEffectOfSkill2, chanceOfStatusEffect2, statusEffectDurationInSeconds2);
 		skill3 = new Skill (skillSprite3, skillName3, levelOfSkill3, baseDamage3, energyCost3, cooldownTime3, statusEffectOfSkill3, chanceOfStatusEffect3, statusEffectDurationInSeconds3);
 		currentHealth = maxHealth;
 		currentStatus = StatusEffect.None;
-	}
 
-	void Start () {
-		ManageEarnedSkills();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+		bossStatusController = GameObject.FindObjectOfType<BossStatusController>();
+
+		skill1ButtonObject = GameObject.Find("Skill 1");
+		skill2ButtonObject = GameObject.Find("Skill 2");
+		skill3ButtonObject = GameObject.Find("Skill 3");
 	}
 
 	public Skill GetSkill1 () {
@@ -148,8 +161,6 @@ public class PlayerClass : MonoBehaviour {
 		Heal (maxHealth);
 		currentStatus = StatusEffect.None;
 
-		ManageEarnedSkills();
-
 
 		if (currentExperiencePoints >= GetExperiencePointsForNextLevel()) {
 			LevelUp();
@@ -159,50 +170,91 @@ public class PlayerClass : MonoBehaviour {
 	public void ManageEarnedSkills () {
 		// TODO move skill activiation to boss events
 		// TODO CREATE boss events script to handle them
-		if (playerLevel >= 3) {
-			// activate skill
-			// enable button and cooldown background and disable dashed circle
-			foreach (Transform thing in GameObject.Find("Skill 3").transform) {
-				if (thing.gameObject.name == "Dashed Circle") {
-					thing.gameObject.SetActive(false);
-				} else {
-					thing.gameObject.SetActive(true);
+		int[] bossStatusArray = bossStatusController.GetBossStatus();
+
+		// skill 3
+		if (!skillUnlocked3) {
+			if (bossStatusArray[2] == 0 && !skillUnlocked3) {
+				// activate skill
+				// enable button and cooldown background and disable dashed circle
+				foreach (Transform thing in skill3ButtonObject.transform) {
+					if (thing.gameObject.name == "Dashed Circle") {
+						thing.gameObject.SetActive(false);
+					} else {
+						thing.gameObject.SetActive(true);
+					}
 				}
-			}
-			GameObject.Find("Skill 3").GetComponentInChildren<SkillButtonController>().ActivateButton();
-			GameObject.Find("Skill 3").GetComponentInChildren<SkillButtonController>().Unlock();
-			skillUnlocked3 = true;
-		} else {
-			foreach (Transform thing in GameObject.Find("Skill 3").transform) {
-				if (thing.gameObject.name == "Dashed Circle") {
-					thing.gameObject.SetActive(true);
-				} else {
-					thing.gameObject.SetActive(false);
+				skill3ButtonObject.GetComponentInChildren<SkillButtonController>().ActivateButton();
+				skill3ButtonObject.GetComponentInChildren<SkillButtonController>().Unlock();
+				skillUnlocked3 = true;
+			} else {
+				foreach (Transform thing in skill3ButtonObject.transform) {
+					if (thing.gameObject.name == "Dashed Circle") {
+						thing.gameObject.SetActive(true);
+					} else {
+						thing.gameObject.SetActive(false);
+					}
 				}
 			}
 		}
 
-		if (playerLevel >= 2) {
-			// activate skill
-			foreach (Transform thing in GameObject.Find("Skill 2").transform) {
-				if (thing.gameObject.name == "Dashed Circle") {
-					thing.gameObject.SetActive(false);
-				} else {
-					thing.gameObject.SetActive(true);
+
+		// skill 2
+		if (!skillUnlocked2) {
+			if (bossStatusArray[1] == 0) {
+				// activate skill
+				foreach (Transform thing in skill2ButtonObject.transform) {
+					if (thing.gameObject.name == "Dashed Circle") {
+						thing.gameObject.SetActive(false);
+					} else {
+						thing.gameObject.SetActive(true);
+					}
 				}
-			}
-			GameObject.Find("Skill 2").GetComponentInChildren<SkillButtonController>().ActivateButton();
-			GameObject.Find("Skill 2").GetComponentInChildren<SkillButtonController>().Unlock();
-			skillUnlocked2 = true;
-		} else {
-			foreach (Transform thing in GameObject.Find("Skill 2").transform) {
-				if (thing.gameObject.name == "Dashed Circle") {
-					thing.gameObject.SetActive(true);
-				} else {
-					thing.gameObject.SetActive(false);
+				skill2ButtonObject.GetComponentInChildren<SkillButtonController>().ActivateButton();
+				skill2ButtonObject.GetComponentInChildren<SkillButtonController>().Unlock();
+				skillUnlocked2 = true;
+			} else {
+				foreach (Transform thing in skill2ButtonObject.transform) {
+					if (thing.gameObject.name == "Dashed Circle") {
+						thing.gameObject.SetActive(true);
+					} else {
+						thing.gameObject.SetActive(false);
+					}
 				}
 			}
 		}
+
+
+		// skill 1
+		if (!skillUnlocked1) {
+			if (bossStatusArray[0] == 0) {
+				// activate skill
+				foreach (Transform thing in skill1ButtonObject.transform) {
+					if (thing.gameObject.name == "Dashed Circle") {
+						thing.gameObject.SetActive(false);
+					} else {
+						thing.gameObject.SetActive(true);
+					}
+				}
+				skill1ButtonObject.GetComponentInChildren<SkillButtonController>().ActivateButton();
+				skill1ButtonObject.GetComponentInChildren<SkillButtonController>().Unlock();
+				skillUnlocked1 = true;
+			} else {
+				foreach (Transform thing in skill1ButtonObject.transform) {
+					if (thing.gameObject.name == "Dashed Circle") {
+						thing.gameObject.SetActive(true);
+					} else {
+						thing.gameObject.SetActive(false);
+					}
+				}
+			}
+		}
+	}
+
+	public void UpdateStats () {
+		attackStat = baseAttackStat + playerLevel - 1;
+		maxHealth = baseHealth * playerLevel;
+		maxEnergy = baseEnergy * playerLevel;
 	}
 
 	public void SetPlayerLevel (int level) {
@@ -262,6 +314,10 @@ public class PlayerClass : MonoBehaviour {
 		currentHealth = health;
 	}
 
+	public void SetCurrentEnergy (float energy) {
+		currentEnergy = energy;
+	}
+
 	public float GetMaxEnergy () {
 		return maxEnergy;
 	}
@@ -308,6 +364,30 @@ public class PlayerClass : MonoBehaviour {
 
 	public bool SkillThreeUnlocked () {
 		return skillUnlocked3;
+	}
+
+	public void SetCooldownTimerSkill1 (float timer) {
+		cooldownTimerSkill1 = timer;
+	}
+
+	public void SetCooldownTimerSkill2 (float timer) {
+		cooldownTimerSkill2 = timer;
+	}
+
+	public void SetCooldownTimerSkill3 (float timer) {
+		cooldownTimerSkill3 = timer;
+	}
+
+	public float GetCooldownTimerSkill1 () {
+		return cooldownTimerSkill1;
+	}
+
+	public float GetCooldownTimerSkill2 () {
+		return cooldownTimerSkill2;
+	}
+
+	public float GetCooldownTimerSkill3 () {
+		return cooldownTimerSkill3;
 	}
 }
 

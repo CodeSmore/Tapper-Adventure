@@ -9,6 +9,13 @@ public class PlayerCombatController : MonoBehaviour {
 	private EnemyMonster enemyMonster;
 	private EventSystem eventSystem;
 	private EnemyStatusController enemyStatusController;
+	private BattleResultsController battleResultsController;
+
+	private bool allSkillsUnlocked = false;
+
+	void Awake () {
+		battleResultsController = GameObject.FindObjectOfType<BattleResultsController>();
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -16,6 +23,17 @@ public class PlayerCombatController : MonoBehaviour {
 		enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
 		eventSystem = GameObject.FindObjectOfType<EventSystem>();
 		enemyStatusController = GameObject.FindObjectOfType<EnemyStatusController>();
+	}
+
+	// updates skill buttons in battle
+	void OnDisable () {
+		if (playerClass && !allSkillsUnlocked) {
+			playerClass.ManageEarnedSkills();
+
+			if (playerClass.SkillOneUnlocked() && playerClass.SkillTwoUnlocked() && playerClass.SkillThreeUnlocked()) {
+				allSkillsUnlocked = true; // added to take away extra call once all skills are unlocked
+			}
+		}
 	}
 	
 	// Update is called once per frame
@@ -33,7 +51,14 @@ public class PlayerCombatController : MonoBehaviour {
 			} else {
 				playerClass.ChargeEnergy();
 			}
+			enemyMonster.TakeDamage(playerClass.GetAttackStat());
 		}
+		
+		if (playerClass.GetCurrentHealth() <= 0) {
+			// show canvas that says, "you died" and offer buttons to quit or load from last save
+			battleResultsController.gameObject.SetActive(true);
+			battleResultsController.LoseBattleResults();
+		} 
 	}
 
 	public void UseSkill1 () {

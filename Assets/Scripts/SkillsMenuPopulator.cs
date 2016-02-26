@@ -43,11 +43,14 @@ public class SkillsMenuPopulator : MonoBehaviour {
 	public Text statusEffectText3;
 	public Text chanceText3;
 
+	void Awake () {
+		playerClass = GameObject.FindObjectOfType<PlayerClass>();
 
+	}
 
 	void OnEnable () {
 
-		if (Time.realtimeSinceStartup > 2) {
+		if (Time.realtimeSinceStartup > 5) {
 			if (!playerClass) {
 				playerClass = GameObject.FindObjectOfType<PlayerClass>();
 			}
@@ -70,6 +73,7 @@ public class SkillsMenuPopulator : MonoBehaviour {
 		
 
 			if (playerClass.SkillOneUnlocked()) {
+				Debug.Log("skill one is unlocked");
 				skillOneStats.SetActive(true);
 
 				image1.sprite = skill1.GetSprite();
@@ -79,6 +83,7 @@ public class SkillsMenuPopulator : MonoBehaviour {
 				cooldownText1.text = skill1.GetCooldown().ToString();
 				statusEffectText1.text = skill1.GetStatusEffect().ToString();
 				chanceText1.text = (skill1.GetChanceOfEffect() * 100).ToString() + "%";
+				Debug.Log("end of skill one is unlocked");
 			} else {
 				skillOneStats.SetActive(false);
 			}

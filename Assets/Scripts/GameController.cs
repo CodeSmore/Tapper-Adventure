@@ -83,13 +83,29 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void SaveGame () {
-		PlayerPrefsManager.SaveGame(playerClass.GetPlayerLevel(), playerClass.GetCurrentExperiencePoints(), playerClass.GetCurrentHealth(), playerMovement.GetLastKnowPosition());
+		PlayerPrefsManager.SaveGame(playerClass.GetPlayerLevel(), playerClass.GetCurrentExperiencePoints(), playerClass.GetCurrentHealth(), playerClass.GetCurrentEnergy(), playerClass.GetCooldownTimerSkill1(), playerClass.GetCooldownTimerSkill2(), playerClass.GetCooldownTimerSkill3(), playerMovement.GetLastKnowPosition(), enemySpawnerController.GetSpawnType(), bossStatusController.GetBossStatus());
 	}
 
 	public void LoadGame () {
+		if (battle.activeSelf) {
+			battle.SetActive(false);
+
+			world.SetActive(true);
+		}
+
 		playerClass.SetPlayerLevel(PlayerPrefsManager.GetPlayerLevel());
+		playerClass.UpdateStats();
 		playerClass.SetCurrentExperiencePoints(PlayerPrefsManager.GetPlayerCurrentExperiencePoints());
 		playerClass.SetCurrentHealth(PlayerPrefsManager.GetPlayerCurrentHealth());
+		playerClass.SetCurrentEnergy(PlayerPrefsManager.GetPlayerCurrentEnergy());
 		playerMovement.SetPlayerPosition(PlayerPrefsManager.GetPlayerLastKnowPosition());
+		enemySpawnerController.SetSpawnType(PlayerPrefsManager.GetLocationSpawnType());
+		bossStatusController.LoadBossStatus(PlayerPrefsManager.GetBossStatus());
+		playerClass.ManageEarnedSkills();
+
+		playerClass.SetCooldownTimerSkill1(PlayerPrefsManager.GetPlayerCooldownSkill1());
+		playerClass.SetCooldownTimerSkill2(PlayerPrefsManager.GetPlayerCooldownSkill2());
+		playerClass.SetCooldownTimerSkill3(PlayerPrefsManager.GetPlayerCooldownSkill3());
+		// based on which skills are unlocked, set cooldown timer values
 	}
 }

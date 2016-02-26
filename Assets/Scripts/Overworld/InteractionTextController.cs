@@ -4,15 +4,12 @@ using System.Collections;
 
 public class InteractionTextController : MonoBehaviour {
 	private Text textBoxText;
+	private PlayerInteractableController playerInteractableController;
 	
 	// Use this for initialization
 	void Start () {
 		textBoxText = GameObject.Find("Text Box").GetComponentInChildren<Text>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+		playerInteractableController = GameObject.FindObjectOfType<PlayerInteractableController>();
 	}
 
 	public void UpdateText (string interactableName) {
@@ -70,6 +67,50 @@ public class InteractionTextController : MonoBehaviour {
 			textBoxText.text = "How's you battle prowess? Hopefully fantasmagorical!\n\nThis portal is sealed by three henchmen of the Overseer of the Forest. You'll have to defeat them before you reach their boss.";
 		} else if (interactableName == "Enchanted Forest Sign (5)") {
 			textBoxText.text = "Uh, ya might wanna hurry. \nI hear the guardian of this room has a rabid pet that'll chase ya down. I'm just sayin.";
+		}
+
+		// Treasury
+		else if (interactableName == "Treasury Sign (1)") {
+			textBoxText.text = "ERROR 404: NOT FOUND\n\nJust kidding! This place is currently under construction. Come back later!";
+		}
+
+		// Hero's Castle
+		else if (interactableName == "Hero's Castle Sign (1)") {
+			textBoxText.text = "Welcome to the Hero's Castle!";
+		} else if (interactableName == "Hero's Castle Sign (2)") {
+			textBoxText.text = "And welcome to the entrance room. It seems they've prepared a special lock on the portal just for you!\n\nVenture to each of the six areas to find the combination to activate this portal. " +
+								"You can change the number in each block by pressing 'Interact'.";
+		} else if (interactableName == "Hero's Castle Sign (3)") {
+			textBoxText.text = "Have you gotten used to the movement controls. I hope so, cause the guards set up some indoor cannons at the end of each hallway ahead to blow you back!";
+		} else if (interactableName == "Hero's Castle Sign (4)") {
+			textBoxText.text = "Oh, look; a doorway that doesn't take 5 minutes to take you to the next room! Progress my friend.\n\nSo, pick the correct door or else...you'll be wrong? Hmm, maybe they should spend less time on doors and more time on devising better puzzles...";
+		} else if (interactableName == "Hero's Castle Sign (5)") {
+			textBoxText.text = "You know the drill; press them in the correct order or prepare to be punished!!!";
+		} else if (interactableName == "Hero's Castle Sign (6)") {
+			textBoxText.text = "Hey you...you, buddy. So, you're in luck! It turns out one of the guards hid one of the combination digits under a cobblestone in this very room! \nWhere is it? How should I know?\nHmm, but he did mention it was 25 paces from the tile I'm standing.";
+		} else if (interactableName == "Hero's Castle Sign (7)") {
+			textBoxText.text = "Say my name. SAY MY NAME!!\n\nSorry, I meant STEP ON MY NAME!!!!";
+		} else if (interactableName == "Hero's Castle Sign (8)") {
+			textBoxText.text = "I don't want to seem crude, but this floor plan seems...a bit...perverse. \n\nBut something is definitly wrong here. How would you get out of a place like this?";
+		} else if (interactableName == "Hero's Castle Sign (9)") {
+			textBoxText.text = "Hey, you made it! So, this is it, The End!\n\nHit the quit button in the menu to find out more about Sketchy Games! Or to, quit and stuff.\n\nSee ya!";
+		} 
+
+		// Combination Room (4) Puzzle
+		else if (interactableName == "Area Where Nothing Is Found") {
+			// used for search puzzle where player searches floor for code. 
+			// It avoids issues with flashing 'Interact' button, seeing false OnEnter/ExitTrigger2Ds, and interacting with the wrong object
+			// Note: also allows me to put the colliders on top of each other and make it one gameObject
+			if (playerInteractableController.GetNumberOfInteractableCollisions() == 1) { 
+				textBoxText.text = "You see nothing of interest.";
+			} else {
+				textBoxText.text = "Under a loose cobblestone, you find a folded note with the number '" + GameObject.FindObjectOfType<CombinationController>().answers[3].ToString() + "' scribbled in it's center.";
+			}
+		} 
+
+		// ERROR
+		else {
+			textBoxText.text = "ERROR: TEXT NOT AVALIABLE FOR INTERACTABLE";
 		}
 	}
 }

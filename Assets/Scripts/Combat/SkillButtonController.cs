@@ -44,17 +44,29 @@ public class SkillButtonController : MonoBehaviour {
 			skillCost = playerClass.GetSkill3().GetEnergyCost();
 		}
 	}
+
+	void OnDisable () {
+		if (gameObject.name == "Skill 1 Button") {
+			// set value of cooldown timer in PlayerClass.cs
+			playerClass.SetCooldownTimerSkill1(GetCooldownTimer());
+		} else if (gameObject.name == "Skill 2 Button") {
+			playerClass.SetCooldownTimerSkill2(GetCooldownTimer());
+		} else if (gameObject.name == "Skill 3 Button") {
+			playerClass.SetCooldownTimerSkill3(GetCooldownTimer());
+		}
+	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (playerClass.currentEnergy < skillCost) {
 			// disable interactive
 			skillButtonComponent.interactable = false;
-		} else if (!cooldownActive) {
+		} else if (!cooldownActive && cooldownTimer >= startCooldownTime) {
 			skillButtonComponent.interactable = true;
 		}
 
-		if (cooldownActive) {
+
+		if (cooldownActive && skillButtonComponent.interactable == false) {
 			
 			cooldownTimerText.text = Mathf.CeilToInt(startCooldownTime - cooldownTimer).ToString();
 			cooldownTimer += Time.deltaTime;
@@ -89,6 +101,10 @@ public class SkillButtonController : MonoBehaviour {
 
 	public void SetCooldownActive (bool active) {
 		cooldownActive = active;
+	}
+
+	public float GetCooldownTimer () {
+		return cooldownTimer;
 	}
 
 	public bool Unlocked () {

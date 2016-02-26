@@ -8,7 +8,9 @@ public class EnemyCombatController : MonoBehaviour {
 	private GameObject battleResultsPanel;
 	private PlayerStatusController playerStatusController;
 	private EnemyActionBar enemyActionBar;
+	private GameObject battle;
 
+	// necessary so that when the enemy dies, certain methods are only called ONCE
 	private bool enemyIsConsumed = false;
 
 	void Awake () {
@@ -16,6 +18,7 @@ public class EnemyCombatController : MonoBehaviour {
 		battleResultsPanel.SetActive(false);
 		playerStatusController = GameObject.FindObjectOfType<PlayerStatusController>();
 		enemyActionBar = GameObject.FindObjectOfType<EnemyActionBar>();
+		battle = GameObject.Find("Battle");
 	}
 
 	// Use this for initialization
@@ -33,19 +36,19 @@ public class EnemyCombatController : MonoBehaviour {
 				enemyIsConsumed = false;
 			}
 
-		} else {
+		} else if (battle.activeSelf) {
 			enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
 		}
 	}
 
 	void EnemyDeath () {
-		battleResultsPanel.SetActive(true);
-
-		// disable actionBar
-		enemyActionBar.gameObject.SetActive(false);
-
 		if (!enemyIsConsumed) {
-			// player eats enemyMonster
+			// disable actionBar
+			enemyActionBar.gameObject.SetActive(false);
+
+			// player eats enemyMonster, heals, gains experience, and populates the battle results
+			battleResultsPanel.SetActive(true);
+
 			playerClass.Heal(enemyMonster.GetMaxHealth() * 0.1f);
 			playerClass.GainExperience(enemyMonster.GetExperienceReward());
 			battleResultsPanel.GetComponent<BattleResultsController>().UpdateBattleResults(enemyMonster.GetExperienceReward(), playerClass.GetCurrentExperiencePoints(), playerClass.GetExperiencePointsForNextLevel());
@@ -76,6 +79,7 @@ public class EnemyCombatController : MonoBehaviour {
 		}
 	}
 
+	// TODO change name or remove KillMonster from this script. It's redundant.
 	public void KillMonster () {
 		enemyMonster.KillMonster();
 	}

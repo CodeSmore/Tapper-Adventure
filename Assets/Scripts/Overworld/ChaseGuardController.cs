@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class ChaseGuardController : MonoBehaviour {
-	public enum Direction {Up, Down, Left, Right};
-
 	public float guardSpeed;
 	public Direction startDirection;
 	public InGameButton activatorButton;

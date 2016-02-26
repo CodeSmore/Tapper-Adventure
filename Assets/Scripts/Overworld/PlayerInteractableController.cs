@@ -10,11 +10,15 @@ public class PlayerInteractableController : MonoBehaviour {
 	private GameObject textBox;
 	private InteractionTextController textController;
 	private Animator transitionPanelAnimator;
+	private UnityAdsExample unityAdsExample;
 
 	private GameObject triggerHit;
 	private GameObject interactTrigger;
 	private Vector3 doorwayDestinationVector3;
+
 	private bool timeToAnnoy = false;
+
+	private int numOfCurrentInteractableCollisions = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -26,10 +30,15 @@ public class PlayerInteractableController : MonoBehaviour {
 		textBox.SetActive(false);
 		textController = GameObject.FindObjectOfType<InteractionTextController>();
 		transitionPanelAnimator = GameObject.Find("Transition Panel").GetComponent<Animator>();
+		unityAdsExample = GameObject.FindObjectOfType<UnityAdsExample>();
 	}
 
 	void OnTriggerEnter2D (Collider2D collider) {
 		triggerHit = collider.gameObject;
+
+		if (triggerHit.tag == "Interactable" || triggerHit.tag == "Destructable" || triggerHit.tag == "Message Interactable") {
+			numOfCurrentInteractableCollisions++;
+		}
 
 		// If player collides with SpawnArea collider, the SpawnType in enemySpawnerController is set
 		// This is in OnTriggerEnter b/c it only needs updated when venue is changed
@@ -37,13 +46,20 @@ public class PlayerInteractableController : MonoBehaviour {
 			enemySpawnerController.SetSpawnType(triggerHit.name);
 		}
 
-		if (triggerHit.tag == "BattleTrigger") {
-			enemySpawnerController.SetSpawnType(triggerHit.name);
+		if (triggerHit.tag == "BattleTrigger" || triggerHit.tag == "Boss") {
+			if (triggerHit.tag == "Boss") {
+				enemySpawnerController.SetSpawnType(triggerHit.name);
+			}
+
 			gameController.BeginBattle();
-			collider.gameObject.SetActive(false);
-		}
+			Destroy(collider.gameObject);
+		} 
 
 		if (triggerHit.tag == "Doorway") {
+			if (triggerHit.GetComponent<Doorway>().GetIsAdPortal()) {
+				// player ad
+				unityAdsExample.ShowAd();
+			}
 			// trigger animation
 			gameObject.GetComponent<PlayerMovement>().SetMovementIsEnabled(false);
 			transitionPanelAnimator.SetTrigger("DoorwayTransitionTrigger");
@@ -63,30 +79,38 @@ public class PlayerInteractableController : MonoBehaviour {
 	void OnTriggerStay2D (Collider2D collider) {
 		interactTrigger = collider.gameObject;
 
-		if (interactTrigger.tag == "Interactable" || interactTrigger.tag == "Destructable") {
+		if (interactTrigger.tag == "Interactable" || interactTrigger.tag == "Destructable" || interactTrigger.tag == "Message Interactable") {
 			interactButton.interactable = true;
 		} 
 	}
 
-	public void TeleportPlayer () {
-		transform.position = doorwayDestinationVector3;
-	}
-
 	void OnTriggerExit2D (Collider2D collider) {
-		if (collider.gameObject.tag == "Interactable" || collider.gameObject.tag == "Destructable") {
-			interactButton.interactable = false;
+		if (collider.gameObject.tag == "Interactable" || collider.gameObject.tag == "Destructable" || collider.gameObject.tag == "Message Interactable") {
+			numOfCurrentInteractableCollisions--;
+			if (numOfCurrentInteractableCollisions == 0) {
+				interactButton.interactable = false;
+			}
 		}
 	}
 
+
+
+
+
 	public void Interact () {
-		if (interactTrigger.GetComponent<SpriteRenderer>().sprite.name == "Sign2") {
+		if (interactTrigger.GetComponent<CombinationBlock>()) {
+			interactTrigger.GetComponent<CombinationBlock>().IncrementBlock();
+		} else if (interactTrigger.tag == "Message Interactable") {
 			textBox.SetActive(true);
 			textController.UpdateText(interactTrigger.name);
 		} else if (interactTrigger.tag == "Destructable") {
 			Destroy(interactTrigger);
 			interactButton.interactable = false;
 		}
+	}
 
+	public void TeleportPlayer () {
+		transform.position = doorwayDestinationVector3;
 	}
 
 	public void DeactivateTextBox () {
@@ -95,5 +119,13 @@ public class PlayerInteractableController : MonoBehaviour {
 
 	public bool IsTimeToAnnoy () {
 		return timeToAnnoy;
+	}
+
+	public int GetNumberOfInteractableCollisions () {
+		return numOfCurrentInteractableCollisions;
+	}
+
+	public void DisableInteractButton () {
+		interactButton.interactable = false;
 	}
 }

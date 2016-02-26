@@ -30,7 +30,7 @@ public class ReactionaryPuzzleObject : MonoBehaviour {
 				}
 
 				// Combination lock must be executed in order
-				if (gameObject.tag == "Combination Lock") {
+				if (gameObject.tag == "Button Combination Lock") {
 					for (int x = buttonArraySize - 1; x >= 1; x--) {
 						if (inGameButtons[x].ButtonIsPressed() && !inGameButtons[x-1].ButtonIsPressed()) {
 							// reset buttons, spawn monster, move player 

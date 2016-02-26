@@ -14,6 +14,7 @@ public class EnemyActionBar : MonoBehaviour {
 	public float chanceToUseSecondSkill;
 	
 	private Image actionBarImage;
+	private RectTransform actionBarRectTransform;
 	
 	private EnemyMonster enemyMonster;
 	private EnemyCombatController enemyCombatController;
@@ -24,6 +25,7 @@ public class EnemyActionBar : MonoBehaviour {
 		enemyCombatController = GameObject.FindObjectOfType<EnemyCombatController>();
 
 		actionBarImage = GetComponent<Image>();
+		actionBarRectTransform = GetComponent<RectTransform>();
 
 		randomChanceOfSecondSkill = Random.value;
 	}
@@ -52,11 +54,14 @@ public class EnemyActionBar : MonoBehaviour {
 			// handles status effects
 			if (enemyMonster.GetCurrentStatus() == StatusEffect.Slow) {
 				enemyMonster.IncrementActionTimer(Time.deltaTime / 2);
-			} else if (enemyMonster.GetCurrentStatus() != StatusEffect.Para) {
+			} else if (enemyMonster.GetCurrentStatus() != StatusEffect.Para) { // Para simply stops timer increment, so do nothing if paralyzed
 				enemyMonster.IncrementActionTimer(Time.deltaTime);
 			}
 
-			GetComponent<RectTransform>().anchoredPosition = new Vector2 (transform.position.x , enemyMonster.GetActionBarYPos());
+
+			if (actionBarRectTransform.anchoredPosition.y != enemyMonster.GetActionBarYPos()) {
+				actionBarRectTransform.anchoredPosition = new Vector2 (transform.position.x , enemyMonster.GetActionBarYPos());
+			}
 			TakeAction ();
 			HandleActionBar();
 		}
@@ -71,6 +76,7 @@ public class EnemyActionBar : MonoBehaviour {
 			// make color blue
 			actionBarImage.color = Color.blue;
 		} else {
+			// if second skill, make it pretty :D
 			colorTimer += Time.deltaTime;
 
 			if (colorTimer >= 1) {
@@ -90,12 +96,15 @@ public class EnemyActionBar : MonoBehaviour {
 	}
 
 	void TakeAction () {
+		// when action timer reaches threshold...
 		if (enemyMonster.GetActionTimerValue() >= secondsBetweenActions) {
+			// attack!!
 			if (!usingSecondSkill) {
 				enemyCombatController.UseSkill1();
 			} else {
 				enemyCombatController.UseSkill2();
 			}
+
 			enemyMonster.ResetActionTimer();
 			randomChanceOfSecondSkill = Random.value;
 		}
