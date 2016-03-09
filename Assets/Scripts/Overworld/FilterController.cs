@@ -22,7 +22,7 @@ public class FilterController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (trigger.ButtonIsPressed()) {
+		if (trigger.IsButtonPressed()) {
 			if (gameObject.name == "Alarm Filter") {
 				// if color reaches max/min, multiply direction by -1
 				filterColor = new Color( filterColor.r, filterColor.g, filterColor.b, Mathf.Clamp(filterColor.a + Time.deltaTime * colorChangeRate, minFilterAlpha, maxFilterAlpha));

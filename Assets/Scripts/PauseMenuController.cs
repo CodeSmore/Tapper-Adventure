@@ -55,6 +55,8 @@ public class PauseMenuController : MonoBehaviour {
 		skillsMenu.SetActive(!skillsMenu.activeSelf);
 	}
 
+	public void ToggleTutorial () {}
+
 	void ToggleTimeScale () {
 		if (Time.timeScale == 0) {
 			Time.timeScale = 1;

@@ -6,6 +6,7 @@ public class BossStatusController : MonoBehaviour {
 	// TODO replace bools with PlayerPrefsManager data
 
 	EnemySpawnerController enemySpawnerController;
+	PlayerClass playerClass;
 
 	public GameObject bridgeBoss;
 	public GameObject caveBoss;
@@ -17,15 +18,17 @@ public class BossStatusController : MonoBehaviour {
 	bool isForestBossAlive = true;
 	bool isCastleBossAlive = true;
 
+	// TODO remove or make easier to distinguish in code
+	public bool skillTestMode = true;
+
 	void Start () {
 		enemySpawnerController = gameObject.GetComponent<EnemySpawnerController>();
-		UpdateBossStatus();
+		playerClass = GameObject.FindObjectOfType<PlayerClass>();
 	}
 
 	public bool IsOppressiveForceActive () {
-		UpdateBossStatus();
 
-		if (enemySpawnerController.GetSpawnType() == "Cave") {
+		if (enemySpawnerController.GetSpawnType() == "Cave" || enemySpawnerController.GetSpawnType() == "Tabuz Maze") {
 			return isCaveBossAlive;
 		} else if (enemySpawnerController.GetSpawnType() == "Enchanted Forest") {
 			return isForestBossAlive;
@@ -33,24 +36,6 @@ public class BossStatusController : MonoBehaviour {
 			return isCastleBossAlive;
 		} else {
 			return false;
-		}
-	}
-
-	public void UpdateBossStatus () {
-		if (!bridgeBoss) {
-			isBridgeBossAlive = false;
-		}
-
-		if (!forestBoss) {
-			isForestBossAlive = false;
-		}
-
-		if (!caveBoss) {
-			isCaveBossAlive = false;
-		}
-
-		if (!castleBoss) {
-			isCastleBossAlive = false;
 		}
 	}
 
@@ -62,18 +47,38 @@ public class BossStatusController : MonoBehaviour {
 
 		if (!isBridgeBossAlive) {
 			bridgeBoss.SetActive(false);
+		} else {
+			bridgeBoss.SetActive(true);
+			playerClass.SetSkill1Unlocked(false);
 		}
 
 		if (!isCaveBossAlive) {
 			caveBoss.SetActive(false);
+		} else {
+			caveBoss.SetActive(true);
+			playerClass.SetSkill2Unlocked(false);
 		}
 
 		if (!isForestBossAlive) {
 			forestBoss.SetActive(false);
+		} else {
+			forestBoss.SetActive(true);
+			playerClass.SetSkill3Unlocked(false);
 		}
 
 		if (!isCastleBossAlive) {
 			castleBoss.SetActive(false);
+		} else {
+			castleBoss.SetActive(true);
+		}
+
+		// used for testing skills during debugging
+		if (skillTestMode) {
+			bridgeBoss.SetActive(false);
+			caveBoss.SetActive(false);
+
+			isBridgeBossAlive = false;
+			isCaveBossAlive = false;
 		}
 	}
 
@@ -87,5 +92,31 @@ public class BossStatusController : MonoBehaviour {
 		bossStatusArray[3] = isCastleBossAlive ? 1:0;
 
 		return bossStatusArray;
+	}
+
+	public void UpdateBossStatus() {
+		if (!bridgeBoss.activeSelf) {
+			isBridgeBossAlive = false;
+		} else {
+			isBridgeBossAlive = true;
+		}
+
+		if (!caveBoss.activeSelf) {
+			isCaveBossAlive = false;
+		} else {
+			isCaveBossAlive = true;
+		}
+
+		if (!forestBoss.activeSelf) {
+			isForestBossAlive = false;
+		} else {
+			isForestBossAlive = true;
+		}
+
+		if (!castleBoss.activeSelf) {
+			isCastleBossAlive = false;
+		} else {
+			isCastleBossAlive = true;
+		}
 	}
 }

@@ -12,14 +12,11 @@ public class LauncherController : MonoBehaviour {
 	public float launchSpeed;
 	public Direction direction;
 	public Transform pointOfFire;
-	private GameObject projectileParentGameObject;
 
 	public GameObject[] ammunition;
 
 	// Use this for initialization
 	void Start () {
-		projectileParentGameObject = GameObject.Find("Active Puzzle Objects");
-
 		// Creates variety for inital launches.
 		// This is necessary because launchers are used in groups.
 		if (Random.value < .5) {
@@ -55,6 +52,6 @@ public class LauncherController : MonoBehaviour {
 		GameObject projectile = Instantiate (firedGameObject, pointOfFire.position, Quaternion.identity) as GameObject;
 		projectile.GetComponent<Projectile>().PlanFlightPath(direction, rotationSpeed, launchSpeed);
 
-		projectile.transform.SetParent(projectileParentGameObject.transform);
+		projectile.transform.SetParent(gameObject.transform);
 	}	
 }

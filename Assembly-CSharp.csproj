@@ -45,7 +45,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Boss.cs" />
      <Compile Include="Assets\Scripts\BossStatusController.cs" />
      <Compile Include="Assets\Scripts\Combat\BattleResultsController.cs" />
      <Compile Include="Assets\Scripts\Combat\EnemyActionBar.cs" />
@@ -80,11 +79,13 @@
      <Compile Include="Assets\Scripts\Overworld\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\Overworld\Projectile.cs" />
      <Compile Include="Assets\Scripts\Overworld\PuzzleController.cs" />
+     <Compile Include="Assets\Scripts\Overworld\PuzzleObjectController.cs" />
      <Compile Include="Assets\Scripts\Overworld\ReactionaryPuzzleObject.cs" />
      <Compile Include="Assets\Scripts\Overworld\ScrollingBlock.cs" />
      <Compile Include="Assets\Scripts\PauseMenuController.cs" />
      <Compile Include="Assets\Scripts\PlayerClass.cs" />
      <Compile Include="Assets\Scripts\PlayerPrefsManager.cs" />
+     <Compile Include="Assets\Scripts\QuitButtonTimerController.cs" />
      <Compile Include="Assets\Scripts\SkillsMenuPopulator.cs" />
      <Compile Include="Assets\Scripts\SoundController.cs" />
      <Compile Include="Assets\Scripts\SplashManager.cs" />

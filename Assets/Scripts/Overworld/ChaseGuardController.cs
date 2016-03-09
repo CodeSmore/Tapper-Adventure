@@ -26,7 +26,7 @@ public class ChaseGuardController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (activatorButton.ButtonIsPressed()) {
+		if (activatorButton.IsButtonPressed()) {
 			if (!guardBody.activeSelf) {
 				guardBody.SetActive(true);
 			}
@@ -61,6 +61,10 @@ public class ChaseGuardController : MonoBehaviour {
 				ResetGuard();
 			}
 		}
+	}
+
+	void OnDisable() {
+		ResetGuard();
 	}
 
 	void ResetGuard() {

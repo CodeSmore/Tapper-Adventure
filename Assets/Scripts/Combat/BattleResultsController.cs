@@ -19,6 +19,10 @@ public class BattleResultsController : MonoBehaviour {
 	private GameObject winBattleResults;
 	private GameObject loseBattleResults;
 
+	// loseBattleResults buttons
+	public GameObject loseAfterTimerObjects1;
+	public GameObject loseAfterTimerObjects2;
+
 	// Level Up Battle Results
 	public GameObject levelUpHeader;
 	public Text levelOld;
@@ -34,6 +38,9 @@ public class BattleResultsController : MonoBehaviour {
 
 	private float resultsTimer;
 	public float enableTransitionTime;
+
+	// set to true when player 'taps to continue' so it can only be done once
+	private bool continuing = false;
 
 	void Awake () {
 		enemyActionBar = GameObject.FindObjectOfType<EnemyActionBar>();
@@ -56,8 +63,11 @@ public class BattleResultsController : MonoBehaviour {
 
 		// text that informs player they can tap screen to continue
 		tapToContinueObject.SetActive(false);
+		loseAfterTimerObjects1.SetActive(false);
+		loseAfterTimerObjects2.SetActive(false);
 
 		resultsTimer = 0;
+		continuing = false;
 	}
 
 	void Update () {
@@ -76,6 +86,13 @@ public class BattleResultsController : MonoBehaviour {
 		// if enough time passes, let player tap-to-continue
 		if (resultsTimer > enableTransitionTime && winBattleResults.activeSelf) {
 			tapToContinueObject.SetActive(true);
+		} else if (resultsTimer > enableTransitionTime && loseBattleResults.activeSelf) {
+			// add buttons to load and quit
+			loseAfterTimerObjects1.SetActive(true);
+
+			if (resultsTimer > enableTransitionTime + 1.5f) {
+				loseAfterTimerObjects2.SetActive(true);
+			}
 		}
 	}
 
@@ -86,12 +103,14 @@ public class BattleResultsController : MonoBehaviour {
 		enemyMonster.ResetHealth();
 
 		tapToContinueObject.SetActive(false);
+		loseAfterTimerObjects1.SetActive(false);
+		loseAfterTimerObjects2.SetActive(false);
 
 		// set to true so it's ready to go next battle
 		enemyActionBar.gameObject.SetActive(true);
 
 		enemyActionBar.ResetActionBar();
-		Destroy(enemyMonster.gameObject);
+		//Destroy(enemyMonster.gameObject); taken out to test in new location for bug prevention
 
 		pauseButton.SetActive(true);
 		gameObject.SetActive(false);
@@ -99,8 +118,10 @@ public class BattleResultsController : MonoBehaviour {
 
 
 	void OnMouseUp () {
-		if (resultsTimer > enableTransitionTime && winBattleResults.activeSelf) {
+		if (resultsTimer > enableTransitionTime && winBattleResults.activeSelf && !continuing) {
 			gameController.TransitionToWorld();
+
+			continuing = true;
 		}
 	}
 
@@ -109,7 +130,7 @@ public class BattleResultsController : MonoBehaviour {
 	void OnDisable () {
 		foreach (SkillButtonController controller in skillButtonControllers) {
 			if (controller.Unlocked()) {
-				controller.SetCooldownActive(true);
+				controller.enabled = true;
 			}	
 		}
 
@@ -121,24 +142,40 @@ public class BattleResultsController : MonoBehaviour {
 	void OnEnable () {
 		foreach (SkillButtonController controller in skillButtonControllers) {
 			if (controller.Unlocked()) {
-				controller.SetCooldownActive(false);
+				controller.enabled = false;
 			}	
 		}
+
+		continuing = false;
 	}
 
 	// called when player health reaches zero
-	public void LoseBattleResults () {
+	public void LoadLoseBattleResults () {
 		// enable 'Lose Battle Results'
 		loseBattleResults.SetActive(true);
+		enemyActionBar.gameObject.SetActive(false);
+
+		// remove enemy status effects to avoid pois death after beating player
+		enemyMonster.SetCurrentStatus(StatusEffect.None);
+
+		// reset timer to keep screen up for 'enableTransitionTime' seconds
+		resultsTimer = 0;
 	}
 
 	// called from gameController when enemy health reaches zero
-	public void UpdateBattleResults (float expGained, float totalExp, float expForNextLevel) {
+	public void LoadWinBattleResults (float expGained, float totalExp, float expForNextLevel) {
 		// enable 'Win Battle Results'
 		winBattleResults.SetActive(true);
 
-		expGainedText.text = expGained / expForNextLevel * 100 + "%";
-		totalExpText.text = totalExp / expForNextLevel * 100 + "%";
+		// .ToString("0.##") rounds to the nearest tenths place, and displays '0' if it is zero (as opposed to not displaying anything as ("#.##") may)
+		expGainedText.text = (expGained / expForNextLevel * 100).ToString("0.#") + "%";
+		totalExpText.text = (totalExp / expForNextLevel * 100).ToString("0.#") + "%";
+
+		if (playerClass.GetCurrentStatus() != StatusEffect.None) {
+			if (playerClass.GetCurrentStatus() == StatusEffect.Pois || Random.value < 0.5f) {
+				playerClass.SetCurrentStatus(StatusEffect.None);
+			}
+		}
 
 		if (totalExp >= expForNextLevel) {
 			levelUpHeader.SetActive(true);
@@ -151,13 +188,7 @@ public class BattleResultsController : MonoBehaviour {
 
 			playerClass.LevelUp();
 
-			// ends the cooldown phase of each earned skill button upon LevelUp
-			foreach (SkillButtonController controller in skillButtonControllers) {
-				if (controller.Unlocked()) {
-					controller.ActivateButton();
-					controller.EndCooldown();
-				}	
-			}
+
 			// TODO create method that resets all relevant variables when a level-up occurs 
 			// in order to avoid having to update them every update()
 

@@ -11,6 +11,8 @@ public class PlayerCombatController : MonoBehaviour {
 	private EnemyStatusController enemyStatusController;
 	private BattleResultsController battleResultsController;
 
+	// used to keep track of player status so that player death methods are called only once
+	private bool isPlayerDefeated = false;
 	private bool allSkillsUnlocked = false;
 
 	void Awake () {
@@ -35,6 +37,10 @@ public class PlayerCombatController : MonoBehaviour {
 			}
 		}
 	}
+
+	void OnEnable () {
+		isPlayerDefeated = false;
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -42,23 +48,27 @@ public class PlayerCombatController : MonoBehaviour {
 			enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
 		}
 
-		if (Input.GetMouseButtonDown(0) && eventSystem.currentSelectedGameObject == null && !eventSystem.IsPointerOverGameObject()) {
-			if (playerClass.GetCurrentStatus() == StatusEffect.Para) {
-				if (Random.value < .4) { // if player is paralyzed, taps work only sometimes
-					playerClass.ChargeEnergy();
+		if (!isPlayerDefeated) {
+			if (Input.GetMouseButtonDown(0) && eventSystem.currentSelectedGameObject == null && !eventSystem.IsPointerOverGameObject()) {
+				if (playerClass.GetCurrentStatus() == StatusEffect.Para) {
+					if (Random.value < .4) { // if player is paralyzed, taps work only sometimes
+						playerClass.ChargeEnergy();
 
+					}
+				} else {
+					playerClass.ChargeEnergy();
 				}
-			} else {
-				playerClass.ChargeEnergy();
+				enemyMonster.TakeDamage(playerClass.GetAttackStat());
 			}
-			enemyMonster.TakeDamage(playerClass.GetAttackStat());
-		}
 		
-		if (playerClass.GetCurrentHealth() <= 0) {
-			// show canvas that says, "you died" and offer buttons to quit or load from last save
-			battleResultsController.gameObject.SetActive(true);
-			battleResultsController.LoseBattleResults();
-		} 
+			if (playerClass.GetCurrentHealth() <= 0) {
+				// show canvas that says, "you died" and offer buttons to quit or load from last save
+				battleResultsController.gameObject.SetActive(true);
+				battleResultsController.LoadLoseBattleResults();
+
+				isPlayerDefeated = true;
+			} 
+		}
 	}
 
 	public void UseSkill1 () {

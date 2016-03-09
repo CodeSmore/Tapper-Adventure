@@ -5,12 +5,12 @@ using System.Collections;
 public class PlayerInteractableController : MonoBehaviour {
 
 	private EnemySpawnerController enemySpawnerController;
-	private GameController gameController;
 	private Button interactButton;
 	private GameObject textBox;
 	private InteractionTextController textController;
 	private Animator transitionPanelAnimator;
 	private UnityAdsExample unityAdsExample;
+	private GameController gameController;
 
 	private GameObject triggerHit;
 	private GameObject interactTrigger;
@@ -23,7 +23,6 @@ public class PlayerInteractableController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		enemySpawnerController = GameObject.FindObjectOfType<EnemySpawnerController>();
-		gameController = GameObject.FindObjectOfType<GameController>();
 		interactButton = GameObject.Find("Interact Button").GetComponent<Button>();
 		interactButton.interactable = false;
 		textBox = GameObject.Find("Text Box");
@@ -31,12 +30,18 @@ public class PlayerInteractableController : MonoBehaviour {
 		textController = GameObject.FindObjectOfType<InteractionTextController>();
 		transitionPanelAnimator = GameObject.Find("Transition Panel").GetComponent<Animator>();
 		unityAdsExample = GameObject.FindObjectOfType<UnityAdsExample>();
+		gameController = GameObject.FindObjectOfType<GameController>();
+	}
+
+	void OnEnable () {
+		// reset these values due to errors caused by going into/ out of battle and increasing interactable count
+		ResetInteratableCount();
 	}
 
 	void OnTriggerEnter2D (Collider2D collider) {
 		triggerHit = collider.gameObject;
 
-		if (triggerHit.tag == "Interactable" || triggerHit.tag == "Destructable" || triggerHit.tag == "Message Interactable") {
+		if (triggerHit.tag == "Interactable" || triggerHit.tag == "Destructable" || triggerHit.tag == "Message Interactable" || triggerHit.tag == "Grind Portal") {
 			numOfCurrentInteractableCollisions++;
 		}
 
@@ -50,9 +55,8 @@ public class PlayerInteractableController : MonoBehaviour {
 			if (triggerHit.tag == "Boss") {
 				enemySpawnerController.SetSpawnType(triggerHit.name);
 			}
-
+			collider.gameObject.SetActive(false);
 			gameController.BeginBattle();
-			Destroy(collider.gameObject);
 		} 
 
 		if (triggerHit.tag == "Doorway") {
@@ -60,8 +64,13 @@ public class PlayerInteractableController : MonoBehaviour {
 				// player ad
 				unityAdsExample.ShowAd();
 			}
+
+			// deactivate interact button AND set interactions to zero
+			interactButton.interactable = false;
+			numOfCurrentInteractableCollisions = 0;
 			// trigger animation
 			gameObject.GetComponent<PlayerMovement>().SetMovementIsEnabled(false);
+
 			transitionPanelAnimator.SetTrigger("DoorwayTransitionTrigger");
 			// TODO animation then triggers this portion
 			doorwayDestinationVector3 = collider.GetComponent<Doorway>().GetDestinationVector();
@@ -79,23 +88,19 @@ public class PlayerInteractableController : MonoBehaviour {
 	void OnTriggerStay2D (Collider2D collider) {
 		interactTrigger = collider.gameObject;
 
-		if (interactTrigger.tag == "Interactable" || interactTrigger.tag == "Destructable" || interactTrigger.tag == "Message Interactable") {
+		if (interactTrigger.tag == "Interactable" || interactTrigger.tag == "Destructable" || interactTrigger.tag == "Message Interactable" || interactTrigger.tag == "Grind Portal") {
 			interactButton.interactable = true;
 		} 
 	}
 
 	void OnTriggerExit2D (Collider2D collider) {
-		if (collider.gameObject.tag == "Interactable" || collider.gameObject.tag == "Destructable" || collider.gameObject.tag == "Message Interactable") {
+		if (collider.gameObject.tag == "Interactable" || collider.gameObject.tag == "Destructable" || collider.gameObject.tag == "Message Interactable" || collider.gameObject.tag == "Grind Portal") {
 			numOfCurrentInteractableCollisions--;
 			if (numOfCurrentInteractableCollisions == 0) {
 				interactButton.interactable = false;
 			}
 		}
 	}
-
-
-
-
 
 	public void Interact () {
 		if (interactTrigger.GetComponent<CombinationBlock>()) {
@@ -106,6 +111,10 @@ public class PlayerInteractableController : MonoBehaviour {
 		} else if (interactTrigger.tag == "Destructable") {
 			Destroy(interactTrigger);
 			interactButton.interactable = false;
+		} else if (interactTrigger.tag == "Grind Portal") {
+			// spawn monster
+			gameController.BeginBattle();
+			Debug.Log("Begin Grinding");
 		}
 	}
 
@@ -127,5 +136,9 @@ public class PlayerInteractableController : MonoBehaviour {
 
 	public void DisableInteractButton () {
 		interactButton.interactable = false;
+	}
+
+	public void ResetInteratableCount () {
+		numOfCurrentInteractableCollisions = 0;
 	}
 }

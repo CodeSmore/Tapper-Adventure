@@ -13,17 +13,16 @@ public class PuzzleController : MonoBehaviour {
 	
 	void OnTriggerEnter2D (Collider2D collider) {
 		if (collider.tag == "Player") {
-			foreach (GameObject puzzleObject in puzzleObjects) {
-				puzzleObject.SetActive(true);
+			if (gameObject.name == "Starter") {
+				foreach (GameObject puzzleObject in puzzleObjects) {
+					puzzleObject.SetActive(true);
+				}
+			} else if (gameObject.name == "Stopper") {
+				foreach (GameObject puzzleObject in puzzleObjects) {
+					puzzleObject.SetActive(false);
+				}
 			}
-		}
-	}
 
-	void OnTriggerExit2D (Collider2D collider) {
-		if (collider.tag == "Player") {
-			foreach (GameObject puzzleObject in puzzleObjects) {
-				puzzleObject.SetActive(false);
-			}
 		}
 	}
 }

@@ -112,10 +112,6 @@ public class PlayerClass : MonoBehaviour {
 
 	private BossStatusController bossStatusController;
 
-	void Update () {
-		Debug.Log("Skill 1 cooldown: " + GetCooldownTimerSkill1());
-	}
-
 	// Use this for initialization
 	void Awake () {
 		skill1 = new Skill (skillSprite1, skillName1, levelOfSkill1, baseDamage1, energyCost1, cooldownTime1, statusEffectOfSkill1, chanceOfStatusEffect1, statusEffectDurationInSeconds1);
@@ -153,7 +149,7 @@ public class PlayerClass : MonoBehaviour {
 
 
 		// increase stats
-		attackStat = baseAttackStat + playerLevel - 1;
+		attackStat = baseAttackStat * playerLevel;
 		maxHealth = baseHealth * playerLevel;
 		maxEnergy = baseEnergy * playerLevel;
 
@@ -224,7 +220,6 @@ public class PlayerClass : MonoBehaviour {
 			}
 		}
 
-
 		// skill 1
 		if (!skillUnlocked1) {
 			if (bossStatusArray[0] == 0) {
@@ -252,7 +247,7 @@ public class PlayerClass : MonoBehaviour {
 	}
 
 	public void UpdateStats () {
-		attackStat = baseAttackStat + playerLevel - 1;
+		attackStat = baseAttackStat * playerLevel;
 		maxHealth = baseHealth * playerLevel;
 		maxEnergy = baseEnergy * playerLevel;
 	}
@@ -270,7 +265,7 @@ public class PlayerClass : MonoBehaviour {
 	}
 
 	public float GetExperiencePointsForNextLevel () {
-		float expForNextLevel = 20 + 20 * (playerLevel - 1);
+		float expForNextLevel = 20 + 40 * (playerLevel - 1);
 
 		return expForNextLevel;
 	}
@@ -366,6 +361,18 @@ public class PlayerClass : MonoBehaviour {
 		return skillUnlocked3;
 	}
 
+	public void SetSkill1Unlocked (bool unlocked) {
+		skillUnlocked1 = unlocked;
+	}
+
+	public void SetSkill2Unlocked (bool unlocked) {
+		skillUnlocked2 = unlocked;
+	}
+
+	public void SetSkill3Unlocked (bool unlocked) {
+		skillUnlocked3 = unlocked;
+	}
+
 	public void SetCooldownTimerSkill1 (float timer) {
 		cooldownTimerSkill1 = timer;
 	}
@@ -388,6 +395,14 @@ public class PlayerClass : MonoBehaviour {
 
 	public float GetCooldownTimerSkill3 () {
 		return cooldownTimerSkill3;
+	}
+
+	public void CompleteRecovery () {
+		currentHealth = maxHealth;
+		currentEnergy = maxEnergy;
+		cooldownTimerSkill1 = 0;
+		cooldownTimerSkill2 = 0;
+		cooldownTimerSkill3 = 0;
 	}
 }
 

@@ -55,16 +55,36 @@ public class SkillButtonController : MonoBehaviour {
 			playerClass.SetCooldownTimerSkill3(GetCooldownTimer());
 		}
 	}
+
+	void OnEnable () {
+		if (gameObject.name == "Skill 1 Button") {
+			// set value of cooldown timer in PlayerClass.cs
+			Debug.Log("setting skill 1 cooldown from playerclass value");
+			Debug.Log(playerClass.GetCooldownTimerSkill1());
+			Debug.Log("Before" + cooldownTimer);
+			cooldownTimer = playerClass.GetCooldownTimerSkill1();
+			Debug.Log("After" + cooldownTimer);
+		} else if (gameObject.name == "Skill 2 Button") {
+			cooldownTimer = playerClass.GetCooldownTimerSkill2();
+		} else if (gameObject.name == "Skill 3 Button") {
+			cooldownTimer = playerClass.GetCooldownTimerSkill3();
+		}
+
+		if (cooldownTimer != 0 && cooldownTimer < startCooldownTime) {
+			cooldownActive = true;
+		} else {
+			FinishCooldown();
+		}
+	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (playerClass.currentEnergy < skillCost) {
 			// disable interactive
 			skillButtonComponent.interactable = false;
-		} else if (!cooldownActive && cooldownTimer >= startCooldownTime) {
+		} else if (!cooldownActive) {
 			skillButtonComponent.interactable = true;
 		}
-
 
 		if (cooldownActive && skillButtonComponent.interactable == false) {
 			
@@ -74,12 +94,17 @@ public class SkillButtonController : MonoBehaviour {
 			cooldownBackgroundImage.fillAmount = cooldownTimer / startCooldownTime;
 
 			if (cooldownTimer >= startCooldownTime) {
-				cooldownActive = false;
-				skillButtonComponent.interactable = true;
-				cooldownTimerText.text = null;
-				cooldownTimer = 0;
+				FinishCooldown();
 			}
 		} 
+	}
+
+	public void FinishCooldown () {
+		cooldownActive = false;
+		skillButtonComponent.interactable = true;
+		cooldownTimerText.text = null;
+		cooldownTimer = 0;
+		cooldownBackgroundImage.fillAmount = 1;
 	}
 
 	public void StartCooldown (float cooldownTime) {

@@ -24,7 +24,7 @@ public class ReactionaryPuzzleObject : MonoBehaviour {
 			if (stillPuzzling) {
 				stillPuzzling = false;
 				foreach (InGameButton button in inGameButtons) {
-					if (!button.ButtonIsPressed()) {
+					if (!button.IsButtonPressed()) {
 						stillPuzzling = true;
 					}
 				}
@@ -32,15 +32,15 @@ public class ReactionaryPuzzleObject : MonoBehaviour {
 				// Combination lock must be executed in order
 				if (gameObject.tag == "Button Combination Lock") {
 					for (int x = buttonArraySize - 1; x >= 1; x--) {
-						if (inGameButtons[x].ButtonIsPressed() && !inGameButtons[x-1].ButtonIsPressed()) {
+						if (inGameButtons[x].IsButtonPressed() && !inGameButtons[x-1].IsButtonPressed()) {
 							// reset buttons, spawn monster, move player 
 
 							GameObject.Find("Player").transform.position = playerResetPosition.transform.position;
 							foreach (InGameButton button in inGameButtons) {
 								button.ResetButton();
 							}
-
 							gameController.BeginBattle();
+
 						}
 					}
 				}
@@ -62,7 +62,7 @@ public class ReactionaryPuzzleObject : MonoBehaviour {
 				GetComponent<SpriteRenderer>().enabled = true;
 				GetComponent<BoxCollider2D>().enabled = true;
 			} else {
-				Destroy(gameObject);
+				gameObject.SetActive(false);
 			}
 		}
 
@@ -71,8 +71,7 @@ public class ReactionaryPuzzleObject : MonoBehaviour {
 
 	void CompletePuzzle () {
 		// delete the object (obstacle or place holder)
-		Destroy(gameObject);
-
+		gameObject.SetActive(false);
 		if (this.tag == "Disabled Portal") {
 			ActivatePortal();
 		}

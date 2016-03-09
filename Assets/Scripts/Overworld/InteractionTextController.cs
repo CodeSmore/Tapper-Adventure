@@ -28,7 +28,7 @@ public class InteractionTextController : MonoBehaviour {
 		} else if (interactableName == "Cave Sign (4)") {
 			textBoxText.text = "Dead ends: Double the time, half the fun! :D";
 		} else if (interactableName == "Cave Sign (5)") {
-			textBoxText.text = "Buttons, how fun! \nTo activate, just step on them.\n\nBy the way, did find the other one?";
+			textBoxText.text = "Buttons, how fun! \nTo activate, just step on them.\n\nBy the way, did you find the other one?";
 		} else if (interactableName == "Cave Sign (6)") {
 			textBoxText.text = "Hmm, the path is blocked by three locks...\nOh well! Guess you'll just have to find the yellow switch for each one!!!\n\nYou can find at least one through each of the two portals.\n\nGood Luck!";
 		} else if (interactableName == "Cave Sign (7)") {
@@ -39,7 +39,9 @@ public class InteractionTextController : MonoBehaviour {
 			textBoxText.text = "Wtf is this!? It's not even a puzzle!! Oh well, just go hit that button.\nI dare ya!";
 		} else if (interactableName == "Cave Sign (10)") {
 			textBoxText.text = "Ooooooooooooooooooooooooooooooooooooooo\nSo many buttons!! :3\nHit the Buttons! Hit ALL the buttons!!\n\n...seriously, this took awhile...";
-		} 
+		} else if (interactableName == "Cave Sign (11)") {
+			textBoxText.text = "Hey, the guy up ahead is pretty tough. I suggest you save now. \n\nIf he's too hard, why not Interact with the Grind Portal by the entrance to beef up a little?";
+		}
 
 		// Someplace
 		else if (interactableName == "Someplace Sign (1)") {
@@ -81,7 +83,7 @@ public class InteractionTextController : MonoBehaviour {
 			textBoxText.text = "And welcome to the entrance room. It seems they've prepared a special lock on the portal just for you!\n\nVenture to each of the six areas to find the combination to activate this portal. " +
 								"You can change the number in each block by pressing 'Interact'.";
 		} else if (interactableName == "Hero's Castle Sign (3)") {
-			textBoxText.text = "Have you gotten used to the movement controls. I hope so, cause the guards set up some indoor cannons at the end of each hallway ahead to blow you back!";
+			textBoxText.text = "Have you gotten used to the movement controls? I hope so, cause the guards set up some indoor cannons at the end of each hallway ahead to blow you back!";
 		} else if (interactableName == "Hero's Castle Sign (4)") {
 			textBoxText.text = "Oh, look; a doorway that doesn't take 5 minutes to take you to the next room! Progress my friend.\n\nSo, pick the correct door or else...you'll be wrong? Hmm, maybe they should spend less time on doors and more time on devising better puzzles...";
 		} else if (interactableName == "Hero's Castle Sign (5)") {

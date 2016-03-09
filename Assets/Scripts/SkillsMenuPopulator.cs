@@ -83,7 +83,6 @@ public class SkillsMenuPopulator : MonoBehaviour {
 				cooldownText1.text = skill1.GetCooldown().ToString();
 				statusEffectText1.text = skill1.GetStatusEffect().ToString();
 				chanceText1.text = (skill1.GetChanceOfEffect() * 100).ToString() + "%";
-				Debug.Log("end of skill one is unlocked");
 			} else {
 				skillOneStats.SetActive(false);
 			}

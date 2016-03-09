@@ -9,8 +9,15 @@ public class ModeTransitionController : MonoBehaviour { // Controls the transiti
 	private BattleResultsController battleResultsController;
 	PlayerInteractableController playerInteractionController;
 	private PlayerMovement playerMovement;
+	private EnemyMonster enemyMonster;
 
 	private Vector3 destinationLocation;
+
+	// TransitionToBattle trigger is triggered when, after the animation to transition back to overworld completes, player taps repeatedly on screen immediately.
+	// No idea how trigger is being triggered as it's only called from GameController.cs method TransitionToBattle().
+	// When triggered, no monster is normally spawned. I created a backup that spawns monster jic this is triggered, but it shouldn't happen at all now.
+
+	private bool allowTransition = false;
 
 	// Use this for initialization
 	void Awake () {
@@ -23,8 +30,23 @@ public class ModeTransitionController : MonoBehaviour { // Controls the transiti
 	}
 
 	public void TransitionMode () {
-		world.SetActive (!world.activeSelf);
-		battle.SetActive (!battle.activeSelf);
+		if (allowTransition) {
+			world.SetActive (!world.activeSelf);
+			battle.SetActive (!battle.activeSelf);
+
+			// destroy monster here
+			enemyMonster = GameObject.FindObjectOfType<EnemyMonster>();
+			if (battle.activeSelf == false && enemyMonster /*exists*/) {
+				Destroy (enemyMonster.gameObject);
+			}
+
+			allowTransition = false;
+		}
+
+	}
+
+	public void EnableAllowTransition () {
+		allowTransition = true;
 	}
 
 	public void EndBattlePreparations () {

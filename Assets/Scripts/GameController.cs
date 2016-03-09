@@ -13,12 +13,12 @@ public class GameController : MonoBehaviour {
 	private GameObject transitionPanel;
 	private BossStatusController bossStatusController;
 	private PlayerInteractableController playerInteractableController;
+	private ModeTransitionController modeTransitionController;
+	private PuzzleObjectController puzzleObjectController;
+	private UnityAdsExample unityAdsExample;
 
 	public float standardDistanceTilSpawnThreshold, oppressedDistanceTilSpawnThreshold, annoyingDistanceTilSpawnThreshold;
 	private float distanceTilSpawnThreshold;
-	private float probabilityOfMonsterAttackPerFrame = 0.01f;
-	private float randomGeneratorTimer = 0;
-	private float randomSpawnNumber = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -31,6 +31,9 @@ public class GameController : MonoBehaviour {
 		battle.SetActive(false);
 		bossStatusController = GameObject.FindObjectOfType<BossStatusController>();
 		playerInteractableController = GameObject.FindObjectOfType<PlayerInteractableController>();
+		modeTransitionController = GameObject.FindObjectOfType<ModeTransitionController>();
+		puzzleObjectController = GameObject.FindObjectOfType<PuzzleObjectController>();
+		unityAdsExample = GameObject.FindObjectOfType<UnityAdsExample>();
 	}
 	
 	// Update is called once per frame
@@ -43,24 +46,22 @@ public class GameController : MonoBehaviour {
 			distanceTilSpawnThreshold = standardDistanceTilSpawnThreshold;
 		}
 
-		randomGeneratorTimer += Time.deltaTime;
-		if (randomGeneratorTimer > 1) {
-			randomSpawnNumber = Random.value;
-		}
 
-		if (playerMovement.GetDistanceTraveled() >= distanceTilSpawnThreshold && randomSpawnNumber < probabilityOfMonsterAttackPerFrame && playerMovement.PlayerIsMoving()) {
+		if (playerMovement.GetDistanceTraveled() >= distanceTilSpawnThreshold && playerMovement.PlayerIsMoving() && enemySpawnerController.GetSpawnType() != "NO SPAWN") {
 			BeginBattle();
 		}
 	}
 
 	public void BeginBattle () {
 		playerMovement.ResetDistanceTraveled();
+		modeTransitionController.EnableAllowTransition();
 		TransitionToBattle();
 	}
 
 	public void TransitionToWorld () {
 		transitionPanel.GetComponent<Image>().fillMethod = Image.FillMethod.Vertical;
 		transitionPanel.GetComponent<Image>().fillOrigin = 1; // top
+		modeTransitionController.EnableAllowTransition();
 		transitionPanel.GetComponent<Animator>().SetTrigger("WorldTransitionTrigger");
 	}
 
@@ -68,10 +69,14 @@ public class GameController : MonoBehaviour {
 		playerMovement.SetMovementIsEnabled(false);
 		// disable world, enable battle
 		transitionPanel.GetComponent<Image>().fillMethod = Image.FillMethod.Radial360;
+		modeTransitionController.EnableAllowTransition();
 		transitionPanel.GetComponent<Animator>().SetTrigger("BattleTransitionTrigger");
 		// disable energy gain and cooldown til end of trigger
 
 
+		// NOTE: Question of efficiency.
+		// It may be more efficient to have a vairable holding the 'Spawner' GameObject, then check to see if it has a child.
+		// If not, THEN Spawn()
 		if (!GameObject.FindObjectOfType<EnemyMonster>()) {
 			enemySpawnerController.Spawn();
 		}
@@ -83,15 +88,18 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void SaveGame () {
-		PlayerPrefsManager.SaveGame(playerClass.GetPlayerLevel(), playerClass.GetCurrentExperiencePoints(), playerClass.GetCurrentHealth(), playerClass.GetCurrentEnergy(), playerClass.GetCooldownTimerSkill1(), playerClass.GetCooldownTimerSkill2(), playerClass.GetCooldownTimerSkill3(), playerMovement.GetLastKnowPosition(), enemySpawnerController.GetSpawnType(), bossStatusController.GetBossStatus());
+		PlayerPrefsManager.SaveGame(playerClass.GetPlayerLevel(), playerClass.GetCurrentExperiencePoints(), playerClass.GetCurrentHealth(), playerClass.GetCurrentEnergy(), playerClass.GetCooldownTimerSkill1(), 
+									playerClass.GetCooldownTimerSkill2(), playerClass.GetCooldownTimerSkill3(), playerMovement.GetLastKnowPosition(), enemySpawnerController.GetSpawnType(), 
+									bossStatusController.GetBossStatus(), puzzleObjectController.GetPuzzleObjectsStatus()
+		);
 	}
 
 	public void LoadGame () {
 		if (battle.activeSelf) {
-			battle.SetActive(false);
-
-			world.SetActive(true);
-		}
+			// destroy monster
+			TransitionToWorld();
+			// enable movement and reset distance traveled
+		} 
 
 		playerClass.SetPlayerLevel(PlayerPrefsManager.GetPlayerLevel());
 		playerClass.UpdateStats();
@@ -99,13 +107,24 @@ public class GameController : MonoBehaviour {
 		playerClass.SetCurrentHealth(PlayerPrefsManager.GetPlayerCurrentHealth());
 		playerClass.SetCurrentEnergy(PlayerPrefsManager.GetPlayerCurrentEnergy());
 		playerMovement.SetPlayerPosition(PlayerPrefsManager.GetPlayerLastKnowPosition());
+		// reset b/c setting the position ^ above calculates distance traveled...
+		playerMovement.ResetDistanceTraveled();
 		enemySpawnerController.SetSpawnType(PlayerPrefsManager.GetLocationSpawnType());
 		bossStatusController.LoadBossStatus(PlayerPrefsManager.GetBossStatus());
 		playerClass.ManageEarnedSkills();
 
+		// based on which skills are unlocked, set cooldown timer values
 		playerClass.SetCooldownTimerSkill1(PlayerPrefsManager.GetPlayerCooldownSkill1());
 		playerClass.SetCooldownTimerSkill2(PlayerPrefsManager.GetPlayerCooldownSkill2());
 		playerClass.SetCooldownTimerSkill3(PlayerPrefsManager.GetPlayerCooldownSkill3());
-		// based on which skills are unlocked, set cooldown timer values
+
+		// Update puzzle objects
+		puzzleObjectController.OnLoadUpdate(PlayerPrefsManager.GetCaveLocksStatus(), PlayerPrefsManager.GetEnchantedForestBarrierLocksStatus());
+	}
+
+	public void AdHeal () {
+		unityAdsExample.ShowAd();
+
+		playerClass.CompleteRecovery();
 	}
 }

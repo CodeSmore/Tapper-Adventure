@@ -32,9 +32,6 @@ public class EnemySpawnerController : MonoBehaviour {
 	public GameObject castleBoss;
 
 
-
-
-
 	public string spawnType = "";
 
 	public void Spawn () {
@@ -50,26 +47,44 @@ public class EnemySpawnerController : MonoBehaviour {
 				enemy = Instantiate(grasslandEnemy1) as GameObject;
 			}
 		} else if (spawnType == "Cave") {
-			if (rand < .15) {
+			if (rand < .25) {
 				enemy = Instantiate(caveEnemy3) as GameObject;
 			} else if (rand < .5) {
 				enemy = Instantiate(caveEnemy2) as GameObject;
 			} else {
 				enemy = Instantiate(caveEnemy1) as GameObject;
 			}
+		} else if (spawnType == "Tabuz Maze") {
+			enemy = Instantiate(caveTabuz) as GameObject;
 		} else if (spawnType == "Someplace") {
-
+			enemy = Instantiate(someplaceEnemy) as GameObject;
 		} else if (spawnType == "Forest") {
-
+			enemy = Instantiate(forestEnemy1) as GameObject;
 		} else if (spawnType == "Enchanted Forest") {
-
-		} else if (spawnType == "Castle Highway") {
-
+			if (rand < .25) {
+				enemy = Instantiate(enchForestEnemy3) as GameObject;
+			} else if (rand < .5) {
+				enemy = Instantiate(enchForestEnemy2) as GameObject;
+			} else {
+				enemy = Instantiate(enchForestEnemy1) as GameObject;
+			}
+ 		} else if (spawnType == "Castle Highway") {
+ 			if (rand < .3) {
+ 				enemy = Instantiate(castleHighwayEnemy2) as GameObject;
+ 			} else {
+ 				enemy = Instantiate(castleHighwayEnemy1) as GameObject;
+ 			}
 		} else if (spawnType == "Hero's Castle") {
+			if (rand < .25) {
+				enemy = Instantiate(castleEnemy3) as GameObject;
+			} else if (rand < .5) {
+				enemy = Instantiate(castleEnemy2) as GameObject;
+			} else {
+				enemy = Instantiate(castleEnemy1) as GameObject;
+			}
+		}
 
-		} 
-
-
+		// Bosses
 		else if (spawnType == "Bridge Boss Encounter") {
 			enemy = Instantiate (bridgeBoss) as GameObject;
 			SetSpawnType("Grassland");
@@ -82,6 +97,8 @@ public class EnemySpawnerController : MonoBehaviour {
 		} else if (spawnType == "Hero's Castle Boss Encounter") {
 			enemy = Instantiate (castleBoss) as GameObject;
 			SetSpawnType("Hero's Castle");
+		} else {
+			enemy = Instantiate (grasslandEnemy1) as GameObject;
 		}
 
 		enemy.transform.parent = transform;
