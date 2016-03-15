@@ -59,11 +59,7 @@ public class SkillButtonController : MonoBehaviour {
 	void OnEnable () {
 		if (gameObject.name == "Skill 1 Button") {
 			// set value of cooldown timer in PlayerClass.cs
-			Debug.Log("setting skill 1 cooldown from playerclass value");
-			Debug.Log(playerClass.GetCooldownTimerSkill1());
-			Debug.Log("Before" + cooldownTimer);
 			cooldownTimer = playerClass.GetCooldownTimerSkill1();
-			Debug.Log("After" + cooldownTimer);
 		} else if (gameObject.name == "Skill 2 Button") {
 			cooldownTimer = playerClass.GetCooldownTimerSkill2();
 		} else if (gameObject.name == "Skill 3 Button") {

@@ -16,7 +16,9 @@ public class InteractionTextController : MonoBehaviour {
 		// GrassLand
 		if (interactableName == "Grassland Sign (1)") {
 			textBoxText.text = "Hi, I'm a talking sign. I just print out my words because the game dev 'forgot' to give me vocal cords.\n\n...yeah, right. I'll 'forget' to warn the player about a trap later...";
-		} 
+		} else if (interactableName == "Grassland Sign (2)") {
+			textBoxText.text = "This guy ahead is your first real challenge. You'll probably want to be level 2 before you fight him. \n\nIt also wouldn't hurt to save from the pause menu. Y'know, if you're afraid :P";
+		}
 
 		// Cave
 		else if (interactableName == "Cave Sign (1)") {
@@ -45,7 +47,7 @@ public class InteractionTextController : MonoBehaviour {
 
 		// Someplace
 		else if (interactableName == "Someplace Sign (1)") {
-			textBoxText.text = "Oh, h-hey. I didn't expect you'd make it this far...\n\nWelcome to Someplace!! or whatever...\n\nC'mon, cut me some slack! That cave was supposed to be a death trap.";
+			textBoxText.text = "Oh, h-hey. I didn't expect you'd make it this far...\n\nWelcome to Someplace!! or whatever...\n\nC'mon, cut me some slack! That cave was supposed to be a death trap. Well, while you're here, you might as well take a look around.";
 		}
 		// Forest
 		else if (interactableName == "Forest Sign (1)") {

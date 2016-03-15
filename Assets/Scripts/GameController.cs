@@ -119,12 +119,10 @@ public class GameController : MonoBehaviour {
 		playerClass.SetCooldownTimerSkill3(PlayerPrefsManager.GetPlayerCooldownSkill3());
 
 		// Update puzzle objects
-		puzzleObjectController.OnLoadUpdate(PlayerPrefsManager.GetCaveLocksStatus(), PlayerPrefsManager.GetEnchantedForestBarrierLocksStatus());
+		puzzleObjectController.OnLoadUpdate(PlayerPrefsManager.GetCaveLockButtonsStatus(), PlayerPrefsManager.GetEnchantedForestBarrierButtonsStatus());
 	}
 
 	public void AdHeal () {
-		unityAdsExample.ShowAd();
-
-		playerClass.CompleteRecovery();
+		unityAdsExample.ShowRewardedAd();
 	}
 }

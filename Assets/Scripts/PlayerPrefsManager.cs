@@ -18,12 +18,12 @@ public class PlayerPrefsManager : MonoBehaviour {
 	const string LOCATION_SPAWN_TYPE_KEY = "location_spawn_type";
 
 	// Puzzle Objects
-	const string CAVE_LOCK_1_KEY = "cave_lock_1";
-	const string CAVE_LOCK_2_KEY = "cave_lock_2";
-	const string CAVE_LOCK_3_KEY = "cave_lock_3";
-	const string ENCH_FOREST_BARRIER_LOCK_1_KEY = "ench_forest_barrier_lock_1";
-	const string ENCH_FOREST_BARRIER_LOCK_2_KEY = "ench_forest_barrier_lock_2";
-	const string ENCH_FOREST_BARRIER_LOCK_3_KEY = "ench_forest_barrier_lock_3";
+	const string CAVE_LOCK_BUTTON_1_KEY = "cave_lock_button_1";
+	const string CAVE_LOCK_BUTTON_2_KEY = "cave_lock_button_2";
+	const string CAVE_LOCK_BUTTON_3_KEY = "cave_lock_button_3";
+	const string ENCH_FOREST_BARRIER_BUTTON_1_KEY = "ench_forest_barrier_button_1";
+	const string ENCH_FOREST_BARRIER_BUTTON_2_KEY = "ench_forest_barrier_button_2";
+	const string ENCH_FOREST_BARRIER_BUTTON_3_KEY = "ench_forest_barrier_button_3";
 	// Bosses
 	const string BRIDGE_BOSS_STATUS_KEY = "bridge_boss_status";
 	const string CAVE_BOSS_STATUS_KEY = "cave_boss_status";
@@ -59,77 +59,80 @@ public class PlayerPrefsManager : MonoBehaviour {
 		PlayerPrefs.SetInt(CASTLE_BOSS_STATUS_KEY, bosses[3]);
 
 		// Puzzle Objects
-		PlayerPrefs.SetInt(CAVE_LOCK_1_KEY, puzzleObjects[0]);
-		PlayerPrefs.SetInt(CAVE_LOCK_2_KEY, puzzleObjects[1]);
-		PlayerPrefs.SetInt(CAVE_LOCK_3_KEY, puzzleObjects[2]);
-		PlayerPrefs.SetInt(ENCH_FOREST_BARRIER_LOCK_1_KEY, puzzleObjects[3]);
-		PlayerPrefs.SetInt(ENCH_FOREST_BARRIER_LOCK_2_KEY, puzzleObjects[4]);
-		PlayerPrefs.SetInt(ENCH_FOREST_BARRIER_LOCK_3_KEY, puzzleObjects[5]);
+		PlayerPrefs.SetInt(CAVE_LOCK_BUTTON_1_KEY, puzzleObjects[0]);
+		PlayerPrefs.SetInt(CAVE_LOCK_BUTTON_2_KEY, puzzleObjects[1]);
+		PlayerPrefs.SetInt(CAVE_LOCK_BUTTON_3_KEY, puzzleObjects[2]);
+		PlayerPrefs.SetInt(ENCH_FOREST_BARRIER_BUTTON_1_KEY, puzzleObjects[3]);
+		PlayerPrefs.SetInt(ENCH_FOREST_BARRIER_BUTTON_2_KEY, puzzleObjects[4]);
+		PlayerPrefs.SetInt(ENCH_FOREST_BARRIER_BUTTON_3_KEY, puzzleObjects[5]);
 	}
 
 	public static int GetPlayerLevel () {
-		return PlayerPrefs.GetInt(PLAYER_LEVEL_KEY);
+		return PlayerPrefs.GetInt(PLAYER_LEVEL_KEY, 1);
 	}
 
 	public static float GetPlayerCurrentExperiencePoints () {
-		return PlayerPrefs.GetFloat(PLAYER_CURRENT_EXPERIENCE_POINTS_KEY);
+		return PlayerPrefs.GetFloat(PLAYER_CURRENT_EXPERIENCE_POINTS_KEY, 0);
 	}
 
 	public static float GetPlayerCurrentHealth () {
-		return PlayerPrefs.GetFloat(PLAYER_CURRENT_HEALTH_KEY);
+		return PlayerPrefs.GetFloat(PLAYER_CURRENT_HEALTH_KEY, 10);
 	}
 
 	public static float GetPlayerCurrentEnergy () {
-		return PlayerPrefs.GetFloat(PLAYER_CURRENT_ENERGY_KEY);
+		return PlayerPrefs.GetFloat(PLAYER_CURRENT_ENERGY_KEY, 0);
 	}
 
 	public static float GetPlayerCooldownSkill1 () {
-		return PlayerPrefs.GetFloat(PLAYER_CURRENT_COOLDOWN_SKILL_ONE_KEY);
+		return PlayerPrefs.GetFloat(PLAYER_CURRENT_COOLDOWN_SKILL_ONE_KEY, 0);
 	}
 
 	public static float GetPlayerCooldownSkill2 () {
-		return PlayerPrefs.GetFloat(PLAYER_CURRENT_COOLDOWN_SKILL_TWO_KEY);
+		return PlayerPrefs.GetFloat(PLAYER_CURRENT_COOLDOWN_SKILL_TWO_KEY, 0);
 	}
 
 	public static float GetPlayerCooldownSkill3 () {
-		return PlayerPrefs.GetFloat(PLAYER_CURRENT_COOLDOWN_SKILL_THREE_KEY);
+		return PlayerPrefs.GetFloat(PLAYER_CURRENT_COOLDOWN_SKILL_THREE_KEY, 0);
 	}
 
 	public static Vector3 GetPlayerLastKnowPosition () {
-		Vector3 lastKnownPos = new Vector3 (PlayerPrefs.GetFloat(PLAYER_LAST_POSITION_X_KEY), PlayerPrefs.GetFloat(PLAYER_LAST_POSITION_Y_KEY), 0f);
+		Vector3 lastKnownPos = new Vector3 (PlayerPrefs.GetFloat(PLAYER_LAST_POSITION_X_KEY, 0), PlayerPrefs.GetFloat(PLAYER_LAST_POSITION_Y_KEY), 0);
 		return lastKnownPos;
 	}
 
 	public static string GetLocationSpawnType () {
-		return PlayerPrefs.GetString(LOCATION_SPAWN_TYPE_KEY);
+		return PlayerPrefs.GetString(LOCATION_SPAWN_TYPE_KEY, "Grassland");
 	}
 
 	public static int[] GetBossStatus () {
+		// 1 means it's alive, 0 means it'd dead
 		int[] bossStatusArray = new int[4];
-		bossStatusArray[0] = PlayerPrefs.GetInt(BRIDGE_BOSS_STATUS_KEY);
-		bossStatusArray[1] = PlayerPrefs.GetInt(CAVE_BOSS_STATUS_KEY);
-		bossStatusArray[2] = PlayerPrefs.GetInt(FOREST_BOSS_STATUS_KEY);
-		bossStatusArray[3] = PlayerPrefs.GetInt(CASTLE_BOSS_STATUS_KEY);
+		bossStatusArray[0] = PlayerPrefs.GetInt(BRIDGE_BOSS_STATUS_KEY, 1);
+		bossStatusArray[1] = PlayerPrefs.GetInt(CAVE_BOSS_STATUS_KEY, 1);
+		bossStatusArray[2] = PlayerPrefs.GetInt(FOREST_BOSS_STATUS_KEY, 1);
+		bossStatusArray[3] = PlayerPrefs.GetInt(CASTLE_BOSS_STATUS_KEY, 1);
 
 		return bossStatusArray;
 	}
 
-	public static int[] GetCaveLocksStatus () {
-		int[] caveLocksArray = new int[3];
+	public static int[] GetCaveLockButtonsStatus () {
+		int[] caveLockButtonsArray = new int[3];
 
-		caveLocksArray[0] = PlayerPrefs.GetInt(CAVE_LOCK_1_KEY);
-		caveLocksArray[1] = PlayerPrefs.GetInt(CAVE_LOCK_2_KEY);
-		caveLocksArray[2] = PlayerPrefs.GetInt(CAVE_LOCK_3_KEY);
+		caveLockButtonsArray[0] = PlayerPrefs.GetInt(CAVE_LOCK_BUTTON_1_KEY, 0);
+		caveLockButtonsArray[1] = PlayerPrefs.GetInt(CAVE_LOCK_BUTTON_2_KEY, 0);
+		caveLockButtonsArray[2] = PlayerPrefs.GetInt(CAVE_LOCK_BUTTON_3_KEY, 0);
 
-		return caveLocksArray;
+		Debug.Log(caveLockButtonsArray[0]);
+
+		return caveLockButtonsArray;
 	}
 
-	public static int[] GetEnchantedForestBarrierLocksStatus () {
+	public static int[] GetEnchantedForestBarrierButtonsStatus () {
 		int[] enchForestLocksArray = new int[3];
 
-		enchForestLocksArray[0] = PlayerPrefs.GetInt(ENCH_FOREST_BARRIER_LOCK_1_KEY);
-		enchForestLocksArray[1] = PlayerPrefs.GetInt(ENCH_FOREST_BARRIER_LOCK_2_KEY);
-		enchForestLocksArray[2] = PlayerPrefs.GetInt(ENCH_FOREST_BARRIER_LOCK_3_KEY);
+		enchForestLocksArray[0] = PlayerPrefs.GetInt(ENCH_FOREST_BARRIER_BUTTON_1_KEY, 0);
+		enchForestLocksArray[1] = PlayerPrefs.GetInt(ENCH_FOREST_BARRIER_BUTTON_2_KEY, 0);
+		enchForestLocksArray[2] = PlayerPrefs.GetInt(ENCH_FOREST_BARRIER_BUTTON_3_KEY, 0);
 
 		return enchForestLocksArray;
 	}
