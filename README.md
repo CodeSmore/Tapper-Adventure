@@ -8,3 +8,5 @@ Multiple worlds, each with their own puzzles, enemies, special abilities to find
 I heard people get lonely in single-player worlds, so we included a snarky sign to guide the way ^_^
 
 <img src="https://github.com/CodeSmore/Tapper-Adventure/blob/master/Images/Sign%20Screenshot.png" width="300">
+
+NOTE: This crashes on Android unfortunately, but it works in Editor and desktop. This was a recovered version from a damaged hard drive, so we take what we can get T.T 
